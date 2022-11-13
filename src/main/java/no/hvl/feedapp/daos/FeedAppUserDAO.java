@@ -1,5 +1,6 @@
 package no.hvl.feedapp.daos;
 
+import no.hvl.feedapp.dtos.FeedAppUserDTO;
 import no.hvl.feedapp.model.FeedAppUser;
 import no.hvl.feedapp.model.Poll;
 import no.hvl.feedapp.model.Vote;
@@ -21,7 +22,7 @@ public class FeedAppUserDAO {
     public FeedAppUserDAO(DatabaseService dbService) {
         this.id_generator = new AtomicLong();
         this.factory = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
-        this.em = factory.createEntityManager();
+        //this.em = factory.createEntityManager();
         this.dbService = dbService;
     }
 
@@ -31,28 +32,30 @@ public class FeedAppUserDAO {
     }
 
     public FeedAppUser addPoll(Poll poll) {
-        FeedAppUser user = getUserByID(poll.getUser().getID());
+        FeedAppUser user = getUserByID(poll.getFeedappuser().getID());
+        System.out.println(String.format("Adding poll to user with ID \"%s\"", poll.getFeedappuser().getID()));
         user.addPoll(poll);
         dbService.merge(user);
         return user;
     }
 
-    public FeedAppUser addVote(Vote vote, Long userID) {
-        if (getUserByID(userID) != null) {
-            FeedAppUser user = this.getUserByID(userID).addVote(vote);
-            dbService.merge(user);
-            return user;
-        }
-        return null;
+    public FeedAppUser addVote(Vote vote) {
+        FeedAppUser user = getUserByID(vote.getUser().getID());
+        user.addVote(vote);
+        dbService.merge(user);
+        return user;
     }
 
     public List<FeedAppUser> getAllUsers() {
-        Query query = em.createQuery("SELECT u FROM FeedAppUser u", FeedAppUser.class);
-        return query.getResultList();
+        List<FeedAppUser> allUsers = dbService.getAll(FeedAppUser.class, "SELECT u FROM FeedAppUser u");
+        //Query query = em.createQuery("SELECT u FROM FeedAppUser u", FeedAppUser.class);
+        return allUsers;
+        //return query.getResultList();
     }
 
     public FeedAppUser getUserByID(Long id) {
-        FeedAppUser user = em.find(FeedAppUser.class, id);
+        //FeedAppUser user = em.find(FeedAppUser.class, id);
+        FeedAppUser user = (FeedAppUser) dbService.find(FeedAppUser.class, id);
         return user;
     }
 

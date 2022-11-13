@@ -1,8 +1,11 @@
 package no.hvl.feedapp.util;
 
-import javax.persistence.*;
+import no.hvl.feedapp.model.FeedAppUser;
 
-public class DatabaseService {
+import javax.persistence.*;
+import java.util.List;
+
+public class DatabaseService<T> {
 
     public static final String PERSISTENCE_UNIT_NAME = "feedapp";
     //@Autowired
@@ -12,10 +15,26 @@ public class DatabaseService {
 
     public DatabaseService() {
         factory = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
-        em = factory.createEntityManager();
+        //em = factory.createEntityManager();
+    }
+
+    public List<T> getAll(Class<T> modelClass, String queryString) {
+        EntityManager em = factory.createEntityManager();
+        Query query = em.createQuery(queryString, modelClass);
+        List<T> list = query.getResultList();
+        em.close();
+        return list;
+    }
+
+    public T find(Class<T> modelClass, Long id) {
+        EntityManager em = factory.createEntityManager();
+        T model = em.find(modelClass, id);
+        em.close();
+        return model;
     }
 
     public Object persist(Object obj) {
+        EntityManager em = factory.createEntityManager();
         EntityTransaction tx = em.getTransaction();
 
         try {
@@ -29,9 +48,7 @@ public class DatabaseService {
                 tx.rollback();
             }
         }
-        finally {
-            //em.close();
-        }
+        finally {em.close();}
         return obj;
     }
 
@@ -50,9 +67,7 @@ public class DatabaseService {
                 tx.rollback();
             }
         }
-        finally {
-            em.close();
-        }
+        finally {em.close();}
         return obj;
     }
 
@@ -73,9 +88,7 @@ public class DatabaseService {
                 tx.rollback();
             }
         }
-        finally {
-            em.close();
-        }
+        finally { em.close();}
         return obj;
     }
 
@@ -87,5 +100,4 @@ public class DatabaseService {
         }
         return true;
     }
-
 }

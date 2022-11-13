@@ -11,6 +11,7 @@ import no.hvl.feedapp.model.Poll;
 import no.hvl.feedapp.util.DatabaseService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,6 +31,8 @@ public class PollController {
         Poll newPoll = poll.setUser(userDAO.getUserByID(Long.valueOf(userID)));
         pollDAO.create(newPoll);
         userDAO.addPoll(newPoll);
+
+        System.out.println(userDAO.getUserByID(Long.valueOf(userID)).getPolls().get(0));
         return gson.toJson(new PollDTO(newPoll));
     }
 

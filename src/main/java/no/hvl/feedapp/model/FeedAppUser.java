@@ -17,23 +17,15 @@ public class FeedAppUser {
     private String password;
 
     //@JsonIgnoreProperties({"feedappuser"})
-    @OneToMany(mappedBy = "feedappuser", cascade = CascadeType.MERGE)
+    @OneToMany(mappedBy = "feedappuser", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<Poll> polls = new ArrayList<>();
 
     //@JsonIgnoreProperties({"feedappuser"})
-    @OneToMany(mappedBy = "feedappuser", cascade = CascadeType.MERGE)
+    @OneToMany(mappedBy = "feedappuser", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<Vote> votes = new ArrayList<>();
 
-    public FeedAppUser() {
-
-    }
-
-    public FeedAppUser(Long id) {
-        this.setID(id);
-    }
-
     public Long getID() {
-        return userID;
+        return this.userID;
     }
 
     public void setID(Long userID) {
@@ -41,7 +33,7 @@ public class FeedAppUser {
     }
 
     public String getUsername() {
-        return username;
+        return this.username;
     }
 
     public void setUsername(String username) {
@@ -57,7 +49,7 @@ public class FeedAppUser {
     }
 
     public String getLastName() {
-        return lastName;
+        return this.lastName;
     }
 
     public void setLastName(String lastName) {
@@ -65,7 +57,7 @@ public class FeedAppUser {
     }
 
     public boolean isAdmin() {
-        return admin;
+        return this.admin;
     }
 
     public void setAdmin(boolean admin) {
@@ -73,7 +65,7 @@ public class FeedAppUser {
     }
 
     public List<Poll> getPolls() {
-        return polls;
+        return this.polls;
     }
 
     public FeedAppUser addPoll(Poll poll) {
@@ -86,7 +78,7 @@ public class FeedAppUser {
     }
 
     public List<Vote> getVotes() {
-        return votes;
+        return this.votes;
     }
 
     public FeedAppUser addVote(Vote vote) {
@@ -99,7 +91,7 @@ public class FeedAppUser {
     }
 
     public String getPassword() {
-        return password;
+        return this.password;
     }
 
     public void setPassword(String password) {

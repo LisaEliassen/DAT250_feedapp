@@ -10,31 +10,31 @@ import java.util.stream.Collectors;
 
 public class PollDTO {
     private Long pollID;
-    private String pollName;
+    private String name;
     private String category;
     private String description;
-    private String pollResult;
+    private String result;
     private Long userID;
-    private List<Long> votes = new ArrayList<>();
+    private List<Long> votes;
     private List<Long> iots;
 
     public PollDTO(Poll poll) {
         this.pollID = poll.getID();
-        this.pollName = poll.getName();
+        this.name = poll.getName();
         this.category = poll.getCategory();
         this.description = poll.getDescription();
-        this.pollResult = poll.getResult();
-        this.userID = poll.getUser().getID();
+        this.result = poll.getResult();
+        this.userID = poll.getFeedappuser().getID();
         if (!poll.getVotes().isEmpty() && poll.getVotes() != null) {
             this.votes = poll.getVotes().stream()
                     .map(Vote::getID)
                     .collect(Collectors.toList());
         }
         else {
-            this.iots = new ArrayList<>();
+            this.votes = new ArrayList<>();
         }
-        if (!poll.getDevices().isEmpty() && poll.getDevices() != null)  {
-            this.iots = poll.getDevices().stream()
+        if (!poll.getIots().isEmpty() && poll.getIots() != null)  {
+            this.iots = poll.getIots().stream()
                     .map(IOTDevice::getID)
                     .collect(Collectors.toList());
         }
@@ -43,25 +43,24 @@ public class PollDTO {
         }
     }
 
-
     public Long getPollID() {
-        return pollID;
+        return this.pollID;
     }
 
     public void setPollID(Long pollID) {
         this.pollID = pollID;
     }
 
-    public String getPollName() {
-        return pollName;
+    public String getName() {
+        return this.name;
     }
 
-    public void setPollName(String pollName) {
-        this.pollName = pollName;
+    public void setName(String poll) {
+        this.name = poll;
     }
 
     public String getCategory() {
-        return category;
+        return this.category;
     }
 
     public void setCategory(String category) {
@@ -69,23 +68,23 @@ public class PollDTO {
     }
 
     public String getDescription() {
-        return description;
+        return this.description;
     }
 
     public void setDescription(String description) {
         this.description = description;
     }
 
-    public String getPollResult() {
-        return pollResult;
+    public String getResult() {
+        return this.result;
     }
 
-    public void setPollResult(String pollResult) {
-        this.pollResult = pollResult;
+    public void setResult(String result) {
+        this.result = result;
     }
 
     public Long getUserID() {
-        return userID;
+        return this.userID;
     }
 
     public void setUserID(Long userID) {
@@ -93,7 +92,7 @@ public class PollDTO {
     }
 
     public List<Long> getVotes() {
-        return votes;
+        return this.votes;
     }
 
     public void setVotes(List<Long> votes) {
@@ -101,7 +100,7 @@ public class PollDTO {
     }
 
     public List<Long> getIots() {
-        return iots;
+        return this.iots;
     }
 
     public void setIots(List<Long> iots) {

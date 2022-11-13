@@ -30,9 +30,9 @@ public class PollDAO {
         return poll;
     }
 
-    public Poll addVote(Vote vote, Long pollID) {
-        if (getPollByID(pollID) != null) {
-            Poll poll = this.getPollByID(pollID).addVote(vote);
+    public Poll addVote(Vote vote) {
+        if (getPollByID(vote.getPoll().getID()) != null) {
+            Poll poll = this.getPollByID(vote.getPoll().getID()).addVote(vote);
             dbService.merge(poll);
             return poll;
         }
@@ -49,13 +49,12 @@ public class PollDAO {
     }
 
     public List<Poll> getAllPolls() {
-        Query query = em.createQuery("SELECT p FROM Poll p", Poll.class);
-        List<Poll> allPolls = query.getResultList();
+        List<Poll> allPolls = dbService.getAll(Poll.class, "SELECT p FROM Poll p");
         return allPolls;
     }
 
     public Poll getPollByID(Long id) {
-        Poll poll = em.find(Poll.class, Long.valueOf(id));
+        Poll poll = (Poll) dbService.find(Poll.class, id);
         return poll;
     }
 
@@ -76,7 +75,7 @@ public class PollDAO {
             updatePoll.setDescription(poll.getDescription());
             updatePoll.setCategory(poll.getCategory());
             updatePoll.setResult(poll.getResult());
-            updatePoll.setVotes(poll.getAllVotes());
+            updatePoll.setVotes(poll.getVotes());
             dbService.merge(updatePoll);
             return updatePoll;
         }

@@ -34,7 +34,8 @@ public class FeedAppUserController {
         List<FeedAppUserDTO> userDTOs = users.stream()
                 .map(user -> new FeedAppUserDTO(user))
                 .collect(Collectors.toList());
-        return gson.toJson(userDTOs);    }
+        return gson.toJson(userDTOs);
+    }
 
     @GetMapping(value = "users/{id}")
     public String getUserByID(@PathVariable("id") String id) {

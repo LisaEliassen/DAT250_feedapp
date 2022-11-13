@@ -1,5 +1,6 @@
 package no.hvl.feedapp.daos;
 
+import no.hvl.feedapp.model.Poll;
 import no.hvl.feedapp.model.Vote;
 import no.hvl.feedapp.util.DatabaseService;
 
@@ -23,24 +24,21 @@ public class VoteDAO {
     }
 
     public Vote create(Vote vote) {
-        /*if(vote.getID() == null) {
-            Long ID = this.id_generator.incrementAndGet();
-            vote.setID(ID);
-        }*/
-
         dbService.persist(vote);
         return vote;
     }
 
     public List<Vote> getAllVotes() {
-        Query query = em.createQuery("SELECT v FROM Vote v", Vote.class);
-        return query.getResultList();
+        List<Vote> allVotes = dbService.getAll(Vote.class, "SELECT v FROM Vote v");
+        return allVotes;
     }
 
     public Vote getVoteByID(Long id) {
-        Vote vote = em.find(Vote.class, Long.valueOf(id));
+        Vote vote = (Vote) dbService.find(Vote.class, id);
         return vote;
     }
+
+
 
     public Vote delete(Long id) {
         Vote vote = getVoteByID(id);

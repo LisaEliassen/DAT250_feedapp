@@ -11,7 +11,7 @@ public class Vote {
     private String vote;
 
     @ManyToOne(targetEntity = FeedAppUser.class)
-    @JoinColumn(name = "feedappuser")
+    @JoinColumn(name = "userID")
     private FeedAppUser feedappuser;
 
     @ManyToOne(targetEntity = Poll.class)
@@ -48,7 +48,7 @@ public class Vote {
     }
 
     public Long getID() {
-        return voteID;
+        return this.voteID;
     }
 
     public void setID(Long voteID) {

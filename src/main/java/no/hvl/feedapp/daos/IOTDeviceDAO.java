@@ -1,5 +1,6 @@
 package no.hvl.feedapp.daos;
 
+import no.hvl.feedapp.model.FeedAppUser;
 import no.hvl.feedapp.model.IOTDevice;
 import no.hvl.feedapp.model.Poll;
 import no.hvl.feedapp.model.Vote;
@@ -29,22 +30,22 @@ public class IOTDeviceDAO {
         return iot;
     }
 
-    public IOTDevice addVote(Vote vote, Long deviceID) {
-        if (getDeviceByID(deviceID) != null) {
-            IOTDevice device = this.getDeviceByID(deviceID).addVote(vote);
+    public IOTDevice addVote(Vote vote) {
+        if (getDeviceByID(vote.getIot().getID()) != null) {
+            IOTDevice device = this.getDeviceByID(vote.getIot().getID()).addVote(vote);
             dbService.merge(device);
             return device;
         }
         return null;
     }
     public List<IOTDevice> getAllDevices() {
-        Query query = em.createQuery("SELECT d FROM IOTDevice d", IOTDevice.class);
-        return query.getResultList();
+        List<IOTDevice> allDevices = dbService.getAll(IOTDevice.class, "SELECT d FROM IOTDevice d");
+        return allDevices;
     }
 
     public IOTDevice getDeviceByID(Long id) {
-        IOTDevice iot = em.find(IOTDevice.class, Long.valueOf(id));
-        return iot;
+        IOTDevice device = (IOTDevice) dbService.find(IOTDevice.class, id);
+        return device;
     }
 
     public IOTDevice delete(Long id) {

@@ -8,10 +8,8 @@ import no.hvl.feedapp.daos.VoteDAO;
 import no.hvl.feedapp.dtos.IOTDeviceDTO;
 import no.hvl.feedapp.dtos.VoteDTO;
 import no.hvl.feedapp.model.IOTDevice;
-import no.hvl.feedapp.model.Poll;
 import no.hvl.feedapp.model.Vote;
 import no.hvl.feedapp.util.DatabaseService;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -37,8 +35,10 @@ public class VoteController {
                 Vote newVote = vote.setUser(userDAO.getUserByID(Long.valueOf(userID)));
                 newVote = newVote.setPoll(pollDAO.getPollByID(Long.valueOf(pollID)));
                 voteDAO.create(newVote);
-                userDAO.addVote(newVote, Long.valueOf(userID));
-                pollDAO.addVote(newVote, Long.valueOf(pollID));
+                userDAO.addVote(newVote);
+                pollDAO.addVote(newVote);
+
+                System.out.println(userDAO.getUserByID(Long.valueOf(userID)).getVotes().get(0));
 
                 return gson.toJson(new VoteDTO(newVote));
             }
@@ -53,18 +53,22 @@ public class VoteController {
                              @PathVariable("deviceID") String deviceID) {
         if (pollID != null && pollDAO.getPollByID(Long.valueOf(pollID)) != null) {
             IOTDevice device = deviceDAO.getDeviceByID(Long.valueOf(deviceID));
-            //System.out.println(gson.toJson(new IOTDeviceDTO(device)));
-            if (device != null && pollDAO.getPollByID(Long.valueOf(pollID)).getDevices().contains(device)) {
-                System.out.println(gson.toJson(device));
+            List<Long> devicesForPoll = pollDAO.getPollByID(Long.valueOf(pollID))
+                    .getIots()
+                    .stream()
+                    .map(IOTDevice::getID)
+                    .collect(Collectors.toList());
+            if (deviceDAO.getDeviceByID(Long.valueOf(deviceID)) != null
+                    && devicesForPoll.contains(Long.valueOf(deviceID))) {
                 Vote newVote = vote.setIot(deviceDAO.getDeviceByID(Long.valueOf(deviceID)));
                 newVote = newVote.setPoll(pollDAO.getPollByID(Long.valueOf(pollID)));
                 voteDAO.create(newVote);
-                deviceDAO.addVote(newVote, Long.valueOf(deviceID));
-                pollDAO.addVote(newVote, Long.valueOf(pollID));
+                deviceDAO.addVote(newVote);
+                pollDAO.addVote(newVote);
 
                 return gson.toJson(new VoteDTO(newVote));
             }
-            return String.format("No associated user found!");
+            return String.format("No associated device found!");
         }
         return String.format("No associated poll found!");
     }

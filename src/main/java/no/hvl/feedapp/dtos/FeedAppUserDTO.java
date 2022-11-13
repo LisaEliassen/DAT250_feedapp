@@ -15,8 +15,8 @@ public class FeedAppUserDTO {
     private String lastName;
     private boolean admin;
     private String password;
-    private List<Long> polls = new ArrayList<>();
-    private List<Long> votes = new ArrayList<>();
+    private List<Long> polls;
+    private List<Long> votes;
 
     public FeedAppUserDTO(FeedAppUser user) {
         this.userID = user.getID();
@@ -25,15 +25,22 @@ public class FeedAppUserDTO {
         this.lastName = user.getLastName();
         this.admin = user.isAdmin();
         this.password = user.getPassword();
+        if(!user.getVotes().isEmpty() && user.getVotes() != null) {
+            this.votes = user.getVotes().stream()
+                    .map(Vote::getID)
+                    .collect(Collectors.toList());
+        }
+        else {
+            System.out.println("Somehow user's votes list is either empty or null.");
+            this.votes = new ArrayList<>();
+        }
         if(!user.getPolls().isEmpty() && user.getPolls() != null) {
             this.polls = user.getPolls().stream()
                     .map(Poll::getID)
                     .collect(Collectors.toList());
         }
-        if(!user.getVotes().isEmpty() && user.getVotes() != null) {
-            this.votes = user.getVotes().stream()
-                    .map(Vote::getID)
-                    .collect(Collectors.toList());
+        else {
+            this.polls = new ArrayList<>();
         }
     }
 
