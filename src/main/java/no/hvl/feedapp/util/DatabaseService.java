@@ -77,9 +77,10 @@ public class DatabaseService<T> {
 
         try {
             tx.begin();
-            System.out.println(tx.isActive());
+            if (!em.contains(obj)) {
+                obj = em.merge(obj);
+            }
             em.remove(obj);
-            System.out.println(tx.isActive());
             tx.commit();
         }
         catch (Throwable e) {

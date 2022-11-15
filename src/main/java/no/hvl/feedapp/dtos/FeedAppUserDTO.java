@@ -31,7 +31,6 @@ public class FeedAppUserDTO {
                     .collect(Collectors.toList());
         }
         else {
-            System.out.println("Somehow user's votes list is either empty or null.");
             this.votes = new ArrayList<>();
         }
         if(!user.getPolls().isEmpty() && user.getPolls() != null) {

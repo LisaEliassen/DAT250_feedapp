@@ -60,6 +60,7 @@ public class PollDAO {
 
     public Poll delete(Long id) {
         Poll poll = getPollByID(id);
+        System.out.println(poll);
         if (poll != null) {
             dbService.remove(poll);
         }
@@ -71,8 +72,9 @@ public class PollDAO {
 
         if (getPollByID(id) != null) {
             Poll updatePoll = getPollByID(id);
-            updatePoll.setName(poll.getName());
-            updatePoll.setDescription(poll.getDescription());
+            updatePoll.setTitle(poll.getTitle());
+            updatePoll.setOpen(poll.isOpen());
+            updatePoll.setPublic(poll.isPublic());
             updatePoll.setCategory(poll.getCategory());
             updatePoll.setResult(poll.getResult());
             updatePoll.setVotes(poll.getVotes());

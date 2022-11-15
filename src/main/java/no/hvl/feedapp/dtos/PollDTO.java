@@ -12,7 +12,8 @@ public class PollDTO {
     private Long pollID;
     private String name;
     private String category;
-    private String description;
+    private boolean isOpen;
+    private boolean isPublic;
     private String result;
     private Long userID;
     private List<Long> votes;
@@ -20,9 +21,10 @@ public class PollDTO {
 
     public PollDTO(Poll poll) {
         this.pollID = poll.getID();
-        this.name = poll.getName();
+        this.name = poll.getTitle();
         this.category = poll.getCategory();
-        this.description = poll.getDescription();
+        this.isOpen = poll.isOpen();
+        this.isPublic = poll.isPublic();
         this.result = poll.getResult();
         this.userID = poll.getFeedappuser().getID();
         if (!poll.getVotes().isEmpty() && poll.getVotes() != null) {
@@ -67,12 +69,20 @@ public class PollDTO {
         this.category = category;
     }
 
-    public String getDescription() {
-        return this.description;
+    public boolean isOpen() {
+        return isOpen;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setOpen(boolean open) {
+        isOpen = open;
+    }
+
+    public boolean isPublic() {
+        return isPublic;
+    }
+
+    public void setPublic(boolean aPublic) {
+        isPublic = aPublic;
     }
 
     public String getResult() {

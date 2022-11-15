@@ -8,7 +8,7 @@ import java.util.List;
 @Table(name="FeedAppUsers")
 public class FeedAppUser {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long userID;
     private String username;
     private String firstName;
