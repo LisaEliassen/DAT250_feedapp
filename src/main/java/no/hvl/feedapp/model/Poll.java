@@ -11,10 +11,11 @@ public class Poll {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long pollID;
-    private String name;
+    private String title;
     private String category;
-    private String description;
     private String result;
+    private boolean isOpen = true;
+    private boolean isPublic = false;
 
     @ManyToOne(targetEntity = FeedAppUser.class)
     private FeedAppUser feedappuser;
@@ -62,12 +63,12 @@ public class Poll {
         this.pollID = pollID;
     }
 
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setTitle(String name) {
+        this.title = name;
     }
 
     public String getCategory() {
@@ -76,14 +77,6 @@ public class Poll {
 
     public void setCategory(String category) {
         this.category = category;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public String getResult() {
@@ -105,6 +98,22 @@ public class Poll {
     public Poll setUser(FeedAppUser user) {
         this.feedappuser = user;
         return this;
+    }
+
+    public boolean isOpen() {
+        return this.isOpen;
+    }
+
+    public void setOpen(boolean open) {
+        this.isOpen = open;
+    }
+
+    public boolean isPublic() {
+        return this.isPublic;
+    }
+
+    public void setPublic(boolean isPrivate) {
+        this.isPublic = isPrivate;
     }
 
     public List<Vote> getVotes() {
