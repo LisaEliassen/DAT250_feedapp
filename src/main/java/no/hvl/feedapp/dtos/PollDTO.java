@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 
 public class PollDTO {
     private Long pollID;
-    private String name;
+    private String title;
     private String category;
     private boolean isOpen;
     private boolean isPublic;
@@ -21,10 +21,10 @@ public class PollDTO {
 
     public PollDTO(Poll poll) {
         this.pollID = poll.getID();
-        this.name = poll.getTitle();
+        this.title = poll.getTitle();
         this.category = poll.getCategory();
-        this.isOpen = poll.isOpen();
-        this.isPublic = poll.isPublic();
+        this.isOpen = poll.isOpenPoll();
+        this.isPublic = poll.isPublicPoll();
         this.result = poll.getResult();
         this.userID = poll.getFeedappuser().getID();
         if (!poll.getVotes().isEmpty() && poll.getVotes() != null) {
@@ -53,12 +53,12 @@ public class PollDTO {
         this.pollID = pollID;
     }
 
-    public String getName() {
-        return this.name;
+    public String getTitle() {
+        return this.title;
     }
 
-    public void setName(String poll) {
-        this.name = poll;
+    public void setTitle(String poll) {
+        this.title = poll;
     }
 
     public String getCategory() {

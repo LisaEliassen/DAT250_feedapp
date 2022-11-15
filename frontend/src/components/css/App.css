@@ -13,11 +13,6 @@
   }
 }
 
-.square {
-  height: 5vmin;
-  width: 5vmin;
-}
-
 .App-header {
   background-color: #282c34;
   min-height: 100vh;
@@ -40,4 +35,8 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.container, .container-fluid {
+  margin-top: 20px;
 }

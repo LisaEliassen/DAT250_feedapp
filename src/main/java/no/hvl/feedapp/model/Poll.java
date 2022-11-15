@@ -14,8 +14,9 @@ public class Poll {
     private String title;
     private String category;
     private String result;
-    private boolean isOpen = true;
-    private boolean isPublic = false;
+
+    private boolean openPoll;
+    private boolean publicPoll;
 
     @ManyToOne(targetEntity = FeedAppUser.class)
     private FeedAppUser feedappuser;
@@ -79,6 +80,22 @@ public class Poll {
         this.category = category;
     }
 
+    public boolean isOpenPoll() {
+        return openPoll;
+    }
+
+    public void setOpenPoll(boolean openPoll) {
+        this.openPoll = openPoll;
+    }
+
+    public boolean isPublicPoll() {
+        return publicPoll;
+    }
+
+    public void setPublicPoll(boolean publicPoll) {
+        this.publicPoll = publicPoll;
+    }
+
     public String getResult() {
         return result;
     }
@@ -98,22 +115,6 @@ public class Poll {
     public Poll setUser(FeedAppUser user) {
         this.feedappuser = user;
         return this;
-    }
-
-    public boolean isOpen() {
-        return this.isOpen;
-    }
-
-    public void setOpen(boolean open) {
-        this.isOpen = open;
-    }
-
-    public boolean isPublic() {
-        return this.isPublic;
-    }
-
-    public void setPublic(boolean isPrivate) {
-        this.isPublic = isPrivate;
     }
 
     public List<Vote> getVotes() {

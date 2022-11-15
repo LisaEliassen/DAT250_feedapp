@@ -33,17 +33,23 @@ public class FeedAppUserDAO {
 
     public FeedAppUser addPoll(Poll poll) {
         FeedAppUser user = getUserByID(poll.getFeedappuser().getID());
-        System.out.println(String.format("Adding poll to user with ID \"%s\"", poll.getFeedappuser().getID()));
-        user.addPoll(poll);
-        dbService.merge(user);
-        return user;
+        if(user != null && poll != null) {
+            System.out.println(String.format("Adding poll to user with ID \"%s\"", poll.getFeedappuser().getID()));
+            user.addPoll(poll);
+            dbService.merge(user);
+            return user;
+        }
+        return null;
     }
 
     public FeedAppUser addVote(Vote vote) {
         FeedAppUser user = getUserByID(vote.getUser().getID());
-        user.addVote(vote);
-        dbService.merge(user);
-        return user;
+        if(user != null && vote != null) {
+            user.addVote(vote);
+            dbService.merge(user);
+            return user;
+        }
+        return null;
     }
 
     public List<FeedAppUser> getAllUsers() {

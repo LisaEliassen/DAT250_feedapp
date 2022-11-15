@@ -73,8 +73,8 @@ public class PollDAO {
         if (getPollByID(id) != null) {
             Poll updatePoll = getPollByID(id);
             updatePoll.setTitle(poll.getTitle());
-            updatePoll.setOpen(poll.isOpen());
-            updatePoll.setPublic(poll.isPublic());
+            updatePoll.setOpenPoll(poll.isOpenPoll());
+            updatePoll.setPublicPoll(poll.isPublicPoll());
             updatePoll.setCategory(poll.getCategory());
             updatePoll.setResult(poll.getResult());
             updatePoll.setVotes(poll.getVotes());
