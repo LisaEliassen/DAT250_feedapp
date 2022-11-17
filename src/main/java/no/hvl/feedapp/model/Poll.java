@@ -60,8 +60,9 @@ public class Poll {
         return pollID;
     }
 
-    public void setID(Long pollID) {
+    public Poll setID(Long pollID) {
         this.pollID = pollID;
+        return this;
     }
 
     public String getTitle() {

@@ -13,6 +13,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,13 +35,37 @@ public class PollController {
     final VoteDAO voteDAO = new VoteDAO(dbService);
 
     @PostMapping("/polls/{userID}")
-    public String createPoll(@RequestBody Poll poll, @PathVariable("userID") String userID) {
-        Poll newPoll = poll.setUser(userDAO.getUserByID(Long.valueOf(userID)));
-        pollDAO.create(newPoll);
-        userDAO.addPoll(newPoll);
+    public String createPoll(@RequestBody Poll poll, @PathVariable("userID") String userID) throws IOException {
+        if (userDAO.getUserByID(Long.valueOf(userID)) != null) {
+            Poll newPoll = poll.setUser(userDAO.getUserByID(Long.valueOf(userID)));
+            pollDAO.create(newPoll);
+            userDAO.addPoll(newPoll);
 
-        System.out.println(userDAO.getUserByID(Long.valueOf(userID)).getPolls().get(0));
-        return gson.toJson(new PollDTO(newPoll));
+            if (newPoll.isOpenPoll()) {
+                URL url = new URL("https://dweet.io/dweet/for/polls");
+                HttpURLConnection con = (HttpURLConnection)url.openConnection();
+                con.setRequestMethod("POST");
+                con.setRequestProperty("Content-Type", "application/json");
+                con.setRequestProperty("Accept", "application/json");
+                con.setDoOutput(true);
+                String pollJson = gson.toJson(new PollDTO(newPoll));
+                try(OutputStream os = con.getOutputStream()) {
+                    byte[] input = pollJson.getBytes("utf-8");
+                    os.write(input, 0, input.length);
+                }
+                try(BufferedReader br = new BufferedReader(
+                        new InputStreamReader(con.getInputStream(), "utf-8"))) {
+                    StringBuilder response = new StringBuilder();
+                    String responseLine = null;
+                    while ((responseLine = br.readLine()) != null) {
+                        response.append(responseLine.trim());
+                    }
+                    System.out.println(response.toString());
+                }
+            }
+            return gson.toJson(new PollDTO(newPoll));
+        }
+        return String.format("No user with id \"%s\" found!", userID);
     }
 
     @GetMapping("/polls")
@@ -66,11 +97,36 @@ public class PollController {
     @PutMapping(value = "polls/{id}")
     public String updatePollById(
             @PathVariable("id") String id,
-            @RequestBody Poll editedPoll) {
+            @RequestBody Poll editedPoll) throws IOException {
 
         // check if id is a number
         if (dbService.isNumber(id)) {
+            Poll previousPoll = pollDAO.getPollByID(Long.valueOf(id));
             Poll poll = pollDAO.update(editedPoll, Long.valueOf(id));
+
+            if ((!previousPoll.isOpenPoll() && poll.isOpenPoll()) ||
+                    (previousPoll.isOpenPoll() && !poll.isOpenPoll())) {
+                URL url = new URL("https://dweet.io/dweet/for/polls");
+                HttpURLConnection con = (HttpURLConnection) url.openConnection();
+                con.setRequestMethod("POST");
+                con.setRequestProperty("Content-Type", "application/json");
+                con.setRequestProperty("Accept", "application/json");
+                con.setDoOutput(true);
+                String pollJson = gson.toJson(new PollDTO(poll));
+                try (OutputStream os = con.getOutputStream()) {
+                    byte[] input = pollJson.getBytes("utf-8");
+                    os.write(input, 0, input.length);
+                }
+                try (BufferedReader br = new BufferedReader(
+                        new InputStreamReader(con.getInputStream(), "utf-8"))) {
+                    StringBuilder response = new StringBuilder();
+                    String responseLine = null;
+                    while ((responseLine = br.readLine()) != null) {
+                        response.append(responseLine.trim());
+                    }
+                    System.out.println(response.toString());
+                }
+            }
 
             if (poll != null) {
                 return gson.toJson(new PollDTO(poll));
