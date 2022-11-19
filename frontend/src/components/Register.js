@@ -19,7 +19,6 @@ class Register extends React.Component {
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    // Whenever an input changes value, change the corresponding state variable
     handleInputChange(event) {
         event.preventDefault();
         const target = event.target;

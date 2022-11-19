@@ -65,6 +65,18 @@ public class FeedAppUserDAO {
         return user;
     }
 
+    public FeedAppUser getUserByUsername(String username) {
+        List<FeedAppUser> allUsers = getAllUsers();
+        for (FeedAppUser user : allUsers) {
+            if (user.getUsername() != null) {
+                if (user.getUsername().strip().equals(username.strip())) {
+                    return user;
+                }
+            }
+        }
+        return null;
+    }
+
     public FeedAppUser delete(Long id) {
         FeedAppUser user = getUserByID(id);
         if (user != null) {

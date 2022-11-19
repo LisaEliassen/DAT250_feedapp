@@ -53,7 +53,7 @@ class Polls extends React.Component {
     render() {
         const {polls} = this.state;
 
-        const pollList = polls.map((poll, i) => {
+        const pollList = polls.map((poll) => {
             const isPublic = (poll.isPublic) ? "Yes":"No";
             const isOpen = (poll.isOpen) ? "Yes":"No";
             return (

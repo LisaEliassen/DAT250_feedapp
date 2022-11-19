@@ -52,6 +52,16 @@ public class FeedAppUserController {
         }
     }
 
+    @GetMapping(value = "users/username/{username}")
+    public String getUserByUsername(@PathVariable("username") String username) {
+
+        FeedAppUser user = userDAO.getUserByUsername(username);
+        if (user != null) {
+            return gson.toJson(new FeedAppUserDTO(user));
+        }
+        return String.format("User with the username \"%s\" not found!", username);
+    }
+
     @PutMapping(value = "users/{id}")
     public String updateUserById(
             @PathVariable("id") String id,
