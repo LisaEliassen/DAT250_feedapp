@@ -8,6 +8,7 @@ import no.hvl.feedapp.daos.VoteDAO;
 import no.hvl.feedapp.dtos.PollDTO;
 import no.hvl.feedapp.model.FeedAppUser;
 import no.hvl.feedapp.model.Poll;
+import no.hvl.feedapp.mongodb.MongoDBService;
 import no.hvl.feedapp.util.DatabaseService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -29,6 +30,7 @@ import java.util.stream.Collectors;
 public class PollController {
     Gson gson = new Gson();
     final DatabaseService dbService = new DatabaseService();
+    final MongoDBService mDbService = new MongoDBService();
     final PollDAO pollDAO = new PollDAO(dbService);
     final FeedAppUserDAO userDAO = new FeedAppUserDAO(dbService);
     final IOTDeviceDAO deviceDAO = new IOTDeviceDAO(dbService);

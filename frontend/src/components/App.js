@@ -6,6 +6,7 @@ import Vote from './Vote';
 import Register from './Register';
 import Login from './Login';
 import useToken from './useToken';
+import PollCreate from "./PollCreate";
 
 
 function MyRouter() {
@@ -18,7 +19,11 @@ function MyRouter() {
         },
         {
             path: "/polls",
-            element: <Polls />,
+            element: <Polls />
+        },
+        {
+            path: "/create_poll",
+            element: <PollCreate />
         },
         {
             path: "/vote/:id",
@@ -26,13 +31,13 @@ function MyRouter() {
         },
         {
             path: "/register",
-            element: <Register />,
+            element: <Register />
         },
         {
             path: "/login",
             element: <Login setToken={setToken} />
         }
-    ]);
+    ], );
 }
 
 function App() {
@@ -43,7 +48,7 @@ function App() {
     }*/
 
     return (
-        <RouterProvider router={MyRouter()}/>
+        <RouterProvider forceRefresh={true} router={MyRouter()}/>
     )
 
 

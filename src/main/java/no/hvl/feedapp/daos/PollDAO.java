@@ -76,7 +76,8 @@ public class PollDAO {
             updatePoll.setOpenPoll(poll.isOpenPoll());
             updatePoll.setPublicPoll(poll.isPublicPoll());
             updatePoll.setCategory(poll.getCategory());
-            updatePoll.setResult(poll.getResult());
+            //updatePoll.setYesCount(poll.getYesCount());
+            //updatePoll.setNoCount(poll.getNoCount());
             updatePoll.setVotes(poll.getVotes());
             dbService.merge(updatePoll);
             return updatePoll;

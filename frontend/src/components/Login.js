@@ -28,39 +28,56 @@ export default function Login({ setToken }) {
     const handleSubmit = async e => {
         e.preventDefault();
 
-        const token = await loginUser({
+        const response = await loginUser({
             username,
             password
         });
-        if (token != null) {
-            setToken(token);
-            console.log("Logged in!")
-            navigate("/polls", { replace: true });
+        console.log(response);
+        if (response.status == "Login failed") {
+            console.log("Wrong username or password")
+            navigate("/login", { replace: true });
+        }
+        else if (response.status == "Login Success") {
+            console.log(response.token);
+            const token = response.token;
+            //const userID = tokenObj.userID;
+            if (token != null) {
+                setToken(response);
+
+                console.log("Logged in!")
+                navigate('/polls', {
+                    state: {
+                        token: response,
+                    }
+                });
+                //navigate("/polls", { replace: true });
+            }
         }
         else {
-            console.log("Wrong username or password")
+            console.log("Something wrong")
             navigate("/login", { replace: true });
         }
     }
 
     return(
-        <div className="login-wrapper">
-            <h1>Please Log In or Register</h1>
-            <form onSubmit={handleSubmit}>
-                <label>
-                    <p>Username</p>
-                    <input type="text" onChange={e => setUserName(e.target.value)} />
-                </label>
-                <label>
-                    <p>Password</p>
-                    <input type="password" onChange={e => setPassword(e.target.value)} />
-                </label>
-                <div>
-                    <button type="submit">Log in</button>
-                </div>
-            </form>
-        </div>
-    )
+            <div className="login-wrapper">
+                <AppNavbar/>
+                <h1>Please Log In or Register</h1>
+                <form onSubmit={handleSubmit}>
+                    <label>
+                        <p>Username</p>
+                        <input type="text" onChange={e => setUserName(e.target.value)} />
+                    </label>
+                    <label>
+                        <p>Password</p>
+                        <input type="password" onChange={e => setPassword(e.target.value)} />
+                    </label>
+                    <div>
+                        <button type="submit">Log in</button>
+                    </div>
+                </form>
+            </div>
+    );
 }
 
 Login.propTypes = {

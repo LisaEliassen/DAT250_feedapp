@@ -11,10 +11,10 @@ public class Poll {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long pollID;
-    private String title;
-    private String category;
-    private String result;
-
+    private String title = "";
+    private String category = "";
+    private int yesCount = 0;
+    private int noCount = 0;
     private boolean openPoll;
     private boolean publicPoll;
 
@@ -31,29 +31,18 @@ public class Poll {
     // TODO: update Result!
     public Poll addVote(Vote vote) {
         this.votes.add(vote);
-        //updateResult();
+        if (vote.getVote() == "yes") {
+            addYesVote();
+        }
+        else if (vote.getVote() == "no") {
+            addNoVote();
+        }
         return this;
     }
 
     public Poll addDevice(IOTDevice device) {
         this.iots.add(device);
         return this;
-    }
-
-    private void updateResult() {
-        int yes = 0;
-        int no = 0;
-        /*
-        for (Long voteID : this.votes) {
-            // Todo: update result of result. We need to potentially use a HashMap to make things efficient.
-            if (vote.getVote() == "yes") {
-                yes++;
-            }
-            else if (vote.getVote() == "no") {
-                no++;
-            }
-        }*/
-        this.result = String.format("yes: \"%s\", no: \"%s\"", yes, no);
     }
 
     public Long getID() {
@@ -97,12 +86,32 @@ public class Poll {
         this.publicPoll = publicPoll;
     }
 
-    public String getResult() {
-        return result;
+    public int getYesCount() {
+        return yesCount;
     }
 
-    public void setResult(String result) {
-        this.result = result;
+    public void setYesCount(int yesCount) {
+        this.yesCount = yesCount;
+    }
+
+    public void addYesVote() {
+        setYesCount(this.yesCount ++);
+    }
+
+    public int getNoCount() {
+        return noCount;
+    }
+
+    public void setNoCount(int noCount) {
+        this.noCount = noCount;
+    }
+
+    public void addNoVote() {
+        setNoCount(this.noCount ++);
+    }
+
+    public String getResult() {
+        return "yes: " + getYesCount() + ", no: " + getNoCount();
     }
 
     public FeedAppUser getFeedappuser() {

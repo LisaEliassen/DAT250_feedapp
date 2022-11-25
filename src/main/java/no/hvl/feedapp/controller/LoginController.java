@@ -37,9 +37,10 @@ public class LoginController {
         if (user != null) {
             if (user.getPassword().equals(loginRequest.getPassword())) {
                 System.out.println(loginRequest.getPassword());
-                return gson.toJson(new Token(getToken()));
+                System.out.println(user.getID());
+                return gson.toJson(new Token(getToken(),user.getID(), "Login Success"));
             }
         }
-        return gson.toJson("status: 'failed'");
+        return gson.toJson(new Token(null, null, "Login failed"));
     }
 }
