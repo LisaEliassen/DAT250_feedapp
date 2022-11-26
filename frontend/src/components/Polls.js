@@ -6,16 +6,6 @@ import { Link, useLocation, useNavigate} from 'react-router-dom';
 import {Button, ButtonGroup, Container, Table} from "reactstrap";
 import useToken from "./useToken";
 
-async function getPolls(userID) {
-    return fetch('http://localhost:8080/polls/'+userID, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-    })
-        .then(data => data.json())
-}
-
 export default function Polls() {
     const navigate = useNavigate();
     const { token } = useToken();
@@ -28,7 +18,6 @@ export default function Polls() {
             setPolls(updatedPolls);
         })
     }
-    //remove.bind(this);
 
     const handlePollCreationNav = () => {
         navigate('/create_poll', {
@@ -38,22 +27,14 @@ export default function Polls() {
         });
     }
 
-    /*const getData = async () => {
-        const response = await fetch('http://localhost:8080/polls'
-        ).then((res) => res.json());
-        setPolls(response);
-    }*/
-
     useEffect(() => {
-        //getData();
         fetch('http://localhost:8080/polls'
         ).then((res) => res.json())
             .then((polls) => {
                 setPolls(polls);
                 console.log(polls);
-        //setPoll(response);
             });
-    }, []);
+    }, [polls]);
 
     const refreshPage = () => {
         window.location.reload(false);

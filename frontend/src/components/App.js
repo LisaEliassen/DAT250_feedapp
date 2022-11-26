@@ -8,6 +8,7 @@ import Login from './Login';
 import useToken from './useToken';
 import PollCreate from "./PollCreate";
 import PollEdit from "./PollEdit";
+import PollResult from "./PollResult";
 
 
 function MyRouter() {
@@ -32,7 +33,11 @@ function MyRouter() {
         },
         {
             path: "/vote/:id",
-            element: <Vote />,
+            element: <Vote />
+        },
+        {
+            path: "poll_result/:id",
+            element: <PollResult />
         },
         {
             path: "/register",

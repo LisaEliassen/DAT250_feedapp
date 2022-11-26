@@ -31,12 +31,18 @@ public class Poll {
     // TODO: update Result!
     public Poll addVote(Vote vote) {
         this.votes.add(vote);
-        if (vote.getVote() == "yes") {
-            addYesVote();
+
+
+        if (vote.getVote().equals("Yes")) {
+            System.out.println("The vote equals Yes");
+            this.addYesVote();
+            return this;
         }
-        else if (vote.getVote() == "no") {
-            addNoVote();
+        else if (vote.getVote().equals("No")) {
+            this.addNoVote();
+            return this;
         }
+        System.out.println("Neither yes or no");
         return this;
     }
 
@@ -87,7 +93,7 @@ public class Poll {
     }
 
     public int getYesCount() {
-        return yesCount;
+        return this.yesCount;
     }
 
     public void setYesCount(int yesCount) {
@@ -95,11 +101,11 @@ public class Poll {
     }
 
     public void addYesVote() {
-        setYesCount(this.yesCount ++);
+       this.yesCount = getYesCount() + 1;
     }
 
     public int getNoCount() {
-        return noCount;
+        return this.noCount;
     }
 
     public void setNoCount(int noCount) {
@@ -107,7 +113,7 @@ public class Poll {
     }
 
     public void addNoVote() {
-        setNoCount(this.noCount ++);
+        this.noCount = getNoCount() + 1;
     }
 
     public String getResult() {

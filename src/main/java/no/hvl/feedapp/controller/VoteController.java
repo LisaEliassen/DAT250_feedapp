@@ -39,8 +39,6 @@ public class VoteController {
                 userDAO.addVote(newVote);
                 pollDAO.addVote(newVote);
 
-                System.out.println(userDAO.getUserByID(Long.valueOf(userID)).getVotes().get(0));
-
                 return gson.toJson(new VoteDTO(newVote));
             }
             return String.format("No associated user found!");

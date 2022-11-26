@@ -33,6 +33,7 @@ public class PollDAO {
     public Poll addVote(Vote vote) {
         if (getPollByID(vote.getPoll().getID()) != null) {
             Poll poll = this.getPollByID(vote.getPoll().getID()).addVote(vote);
+            System.out.println(poll.getYesCount());
             dbService.merge(poll);
             return poll;
         }
