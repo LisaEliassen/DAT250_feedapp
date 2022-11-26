@@ -2,50 +2,31 @@ import React from 'react';
 import './css/App.css';
 import {createBrowserRouter, Link, RouterProvider} from 'react-router-dom';
 import { Button, Container } from 'reactstrap';
-import Polls from "./Polls";
-import Vote from "./Vote";
-import Register from "./Register";
-import Login from "./Login";
 import useToken from "./useToken";
 
 export default function Home() {
-    const { token, setToken } = useToken();
-    const handleLoginRedirect = async e => {
-        e.preventDefault();
+    const { token, setToken, deleteToken} = useToken();
 
-        if (!token) {
-            return "/login";
-        }
-        else {
-            return "/polls";
-        }
+    const handleLogOut = () => {
+        deleteToken();
+        window.location.reload(false);
     }
 
-    const handleRegisterRedirect = async e => {
-        e.preventDefault();
+    if (token != null) {
         return (
-            <Register />
-        );
+            <div>
+                <h3>Feedback Application</h3>
+                <Container fluid>
+                    <Button onClick={handleLogOut}>Logout</Button>
+                    <br></br>
+                    <Button>
+                        <Link to="/polls">Go to polls</Link>
+                    </Button>
+                </Container>
+            </div>
+        )
     }
-
-    return (
-        <div>
-            <h3>Feedback Application</h3>
-            <Container fluid>
-                <Button>
-                    <Link to="/login">Login</Link>
-                </Button>
-                <Button>
-                    <Link to="/register">Sign up</Link>
-                </Button>
-            </Container>
-        </div>
-    )
-}
-
-
-class HomeC extends React.Component {
-    render() {
+    else {
         return (
             <div>
                 <h3>Feedback Application</h3>
@@ -56,9 +37,12 @@ class HomeC extends React.Component {
                     <Button>
                         <Link to="/register">Sign up</Link>
                     </Button>
+                    <br></br>
+                    <Button>
+                        <Link to="/polls">Go to polls</Link>
+                    </Button>
                 </Container>
             </div>
-        );
+        )
     }
 }
-//export default Home;

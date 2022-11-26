@@ -12,8 +12,8 @@ public class PollDTO {
     private Long pollID;
     private String title;
     private String category;
-    private boolean isOpen;
-    private boolean isPublic;
+    private boolean openPoll;
+    private boolean publicPoll;
 
     private int yesCount;
 
@@ -26,8 +26,8 @@ public class PollDTO {
         this.pollID = poll.getID();
         this.title = poll.getTitle();
         this.category = poll.getCategory();
-        this.isOpen = poll.isOpenPoll();
-        this.isPublic = poll.isPublicPoll();
+        this.openPoll = poll.isOpenPoll();
+        this.publicPoll = poll.isPublicPoll();
         this.yesCount = poll.getYesCount();
         this.noCount = poll.getNoCount();
         this.userID = poll.getFeedappuser().getID();
@@ -73,20 +73,20 @@ public class PollDTO {
         this.category = category;
     }
 
-    public boolean isOpen() {
-        return isOpen;
+    public boolean isOpenPoll() {
+        return openPoll;
     }
 
-    public void setOpen(boolean open) {
-        isOpen = open;
+    public void setOpenPoll(boolean openPoll) {
+        this.openPoll = openPoll;
     }
 
-    public boolean isPublic() {
-        return isPublic;
+    public boolean isPublicPoll() {
+        return publicPoll;
     }
 
-    public void setPublic(boolean aPublic) {
-        isPublic = aPublic;
+    public void setPublicPoll(boolean publicPoll) {
+        this.publicPoll = publicPoll;
     }
 
     public Long getUserID() {

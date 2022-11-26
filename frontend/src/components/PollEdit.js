@@ -1,83 +1,156 @@
-import React from "react";
-import axios from "axios";
+import React, {useEffect, useState} from "react";
 import AppNavbar from "./AppNavbar";
 import {Button, Container, Form, FormGroup, Input, Label} from "reactstrap";
-import {Link} from "react-router-dom";
+import {Link, useNavigate, useParams} from "react-router-dom";
+import useToken from "./useToken";
+import axios from "axios";
 
-class PollEdit extends React.Component {
-    emptyPoll = {
-        title: ''
-    };
+export default function PollEdit() {
+    const navigate = useNavigate();
+    const { token } = useToken();
+    const { id } = useParams();
+    const [poll, setPoll] = useState([]);
+    const [updatedPoll, setUpdatedPoll] = useState([{
+        title: poll.title,
+        category: poll.category,
+        openPoll: poll.openPoll,
+        publicPoll: poll.publicPoll
+    }]);
+    //console.log(updatedPoll);
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            poll: this.emptyPoll
-        };
-        this.handleChange = this.handleChange.bind(this);
+    const getPoll = async () => {
+        const response = await fetch('http://localhost:8080/polls/'+ id
+        ).then((res) => res.json());
+        setPoll(response);
+        console.log(response);
     }
 
-    async componentDidMount() {
-        if (this.props.match.params.id !== 'new') {
-            const poll = await (await axios.get(`http://localhost:8080/polls/${this.props.match.params.id}`));
-            console.log(poll)
-            this.setState({item: poll});
-        }
-    }
+    useEffect(() => {
+        fetch('http://localhost:8080/polls/'+ id
+        ).then((res) => res.json())
+            .then((poll) => {
+                setPoll(poll);
+                console.log(poll);
+                setUpdatedPoll({
+                    title: poll.title,
+                    category: poll.category,
+                    openPoll: poll.openPoll,
+                    publicPoll: poll.publicPoll
+                });
+            });
+        //setPoll(response);
 
-    handleChange(event) {
-        const target = event.target;
-        const value = target.value;
-        const name = target.name;
-        let poll = {...this.state.poll};
-        poll[name] = value;
-        this.setState({poll});
-    }
+    }, []);
+    console.log(updatedPoll);
 
-    async handleSubmit(event) {
+    const updatePoll = (event) => {
         event.preventDefault();
-        const {poll} = this.state;
-
-        await fetch('http://localhost:8080/polls' + (poll.pollID ? '/' + poll.pollID : ''), {
-            method: (poll.pollID) ? 'PUT' : 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(poll),
+        console.log(updatedPoll);
+        const json = JSON.stringify({
+            title: updatedPoll.title,
+            category: updatedPoll.category,
+            openPoll: updatedPoll.openPoll,
+            publicPoll: updatedPoll.publicPoll
         });
-        this.props.history.push('/polls');
+        axios.put('http://localhost:8080/polls/'+id, json, {
+            headers: {
+                'Content-Type': 'application/json'
+            }}
+        ).then(res => console.log(res.data))
+            .catch(error => {
+                console.log(error.response)
+            });
+
+        navigate('/polls', {replace:true});
+
     }
 
+    const handleInputChange = (event) => {
+        const target = event.target;
+        let parameter = target.name;
 
-    render() {
-        const {poll} = this.state;
-        const title = <h2>{poll.pollID}</h2>;
+        //event.preventDefault();
+        setUpdatedPoll({
+            ...updatedPoll,
+            [parameter]: target.value
+        })
+        //updatedPoll[parameter] = target.value
+    }
 
-        return (
+    const handleOpenPoll = () => {
+        setUpdatedPoll({
+            ...updatedPoll,
+            openPoll: !updatedPoll.openPoll
+        });
+        //console.log(updatedPoll);
+    }
+
+    const handlePublicPoll = () => {
+        setUpdatedPoll({
+            ...updatedPoll,
+            publicPoll: !updatedPoll.publicPoll
+        });
+        //console.log(updatedPoll);
+    }
+
+    if (token == null && token.userID == poll.userID) {
+        return(
             <div>
                 <AppNavbar/>
                 <Container>
-                    {title}
-                    <Form onSubmit={this.handleSubmit}>
+                    You need to be logged in as the poll's owner to edit this poll!
+                    <br></br>
+                    <Button>
+                        <Link to="/login">Login</Link>
+                    </Button>
+                    <Button>
+                        <Link to="/register">Sign up</Link>
+                    </Button>
+                </Container>
+            </div>
+        );
+    }
+    else {
+        return(
+            <div>
+                <AppNavbar/>
+                <Container>
+                    <h3>Edit poll {id}</h3>
+                    <Form onSubmit={updatePoll}>
                         <FormGroup>
                             <Label for="title">Title</Label>
-                            <Input type="text" name="title" id="title" value={poll.title || ''}
-                                   onChange={this.handleChange} autoComplete="title"/>
+                            <Input type="text" name="title" id="title" defaultValue={poll.title || ''}
+                                   onChange={handleInputChange} autoComplete="title"/>
                         </FormGroup>
                         <FormGroup>
                             <Label for="category">Category</Label>
-                            <Input type="text" name="category" id="category" value={poll.category || ''}
-                                   onChange={this.handleChange} autoComplete="category"/>
+                            <Input type="text" name="category" id="category" defaultValue={poll.category || ''}
+                                   onChange={handleInputChange} autoComplete="category"/>
                         </FormGroup>
                         <FormGroup>
-                            <Button color="primary" type="submit">Save</Button>{' '}
-                            <Button color="secondary" tag={Link} to="/polls">Cancel</Button>
+                            Open poll: {(updatedPoll.openPoll) ? "Yes" : "No"}
+                            <Button type="button" onClick={handleOpenPoll}>{(updatedPoll.openPoll) ? "Close poll" : "Open poll"}</Button>
+                            <br></br>
+                            Public poll: {(updatedPoll.publicPoll) ? "Yes" : "No"}
+                            <Button type="button" onClick={handlePublicPoll}>Change to {(updatedPoll.publicPoll) ? "private" : "public"}</Button>
+                        </FormGroup>
+
+                        <FormGroup>
+                            <Button color="primary" type="submit">Save</Button>
+                        </FormGroup>
+                        <FormGroup>
+                            <Button color="secondary">
+                                <Link to="/polls">Cancel</Link>
+                            </Button>
+                        </FormGroup>
+                        <FormGroup>
+                            <Button>Delete poll</Button>
                         </FormGroup>
                     </Form>
                 </Container>
             </div>
-        )
+        );
     }
 }
-export default PollEdit;
+
+

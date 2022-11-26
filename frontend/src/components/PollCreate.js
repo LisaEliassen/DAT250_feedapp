@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import axios from "axios";
 import AppNavbar from './AppNavbar';
 import { Link, useLocation, useNavigate} from 'react-router-dom';
@@ -28,7 +28,9 @@ export default function PollCreate() {
             headers: {
                 'Content-Type': 'application/json'
             }}
-        ).then(res => console.log(res.data))
+        ).then(res => {
+            console.log(res.data)
+        })
             .catch(error => {
                 console.log(error.response)
             });
@@ -50,7 +52,8 @@ export default function PollCreate() {
             else {
                 poll[parameter] = false;
             }
-            //console.log(poll[parameter]);
+            console.log(poll[parameter]);
+            console.log(target.checked)
         }
         else {
             event.preventDefault();
@@ -58,40 +61,61 @@ export default function PollCreate() {
         }
     }
 
-    return(
-        <div>
-            <AppNavbar/>
-            <Container>
-                <h3>Sign up</h3>
-                <Form onSubmit={sendPoll}>
-                    <FormGroup>
-                        <Label for="title">Title</Label>
-                        <Input type="text" name="title" id="title"
-                               onChange={handleInputChange} autoComplete="title"/>
-                    </FormGroup>
-                    <FormGroup>
-                        <Label for="category">Category</Label>
-                        <Input type="text" name="category" id="category"
-                               onChange={handleInputChange} autoComplete="category"/>
-                    </FormGroup>
-                    <FormGroup>
-                        <Label for="openPoll">Open Poll</Label>
-                        <Input type="checkbox" name="openPoll" id="openPoll" defaultChecked={false}
-                               onChange={handleInputChange} autoComplete="openPoll"/>
-                    </FormGroup>
-                    <FormGroup>
-                        <Label for="publicPoll">Public Poll</Label>
-                        <Input type="checkbox" name="publicPoll" id="publicPoll" defaultChecked={false}
-                               onChange={handleInputChange} autoComplete="publicPoll"/>
-                    </FormGroup>
+    if (token == null) {
+        return(
+            <div>
+                <AppNavbar/>
+                <Container>
+                    You need to be logged in to make a poll!
+                    <br></br>
+                    <Button>
+                        <Link to="/login">Login</Link>
+                    </Button>
+                    <Button>
+                        <Link to="/register">Sign up</Link>
+                    </Button>
+                </Container>
+            </div>
+        );
+    }
+    else {
+        return(
+            <div>
+                <AppNavbar/>
+                <Container>
+                    <h3>Create a poll</h3>
+                    <Form onSubmit={sendPoll}>
+                        <FormGroup>
+                            <Label for="title">Title</Label>
+                            <Input type="text" name="title" id="title"
+                                   onChange={handleInputChange} autoComplete="title"/>
+                        </FormGroup>
+                        <FormGroup>
+                            <Label for="category">Category</Label>
+                            <Input type="text" name="category" id="category"
+                                   onChange={handleInputChange} autoComplete="category"/>
+                        </FormGroup>
+                        <FormGroup>
+                            <Label for="openPoll">Open Poll</Label>
+                            <Input type="checkbox" name="openPoll" id="openPoll" defaultChecked={false}
+                                   onChange={handleInputChange} autoComplete="openPoll"/>
+                        </FormGroup>
+                        <FormGroup>
+                            <Label for="publicPoll">Public Poll</Label>
+                            <Input type="checkbox" name="publicPoll" id="publicPoll" defaultChecked={false}
+                                   onChange={handleInputChange} autoComplete="publicPoll"/>
+                        </FormGroup>
 
-                    <FormGroup>
-                        <Button color="primary" type="submit">Save</Button>{' '}
-                        <Button color="secondary" tag={Link} to="/polls">Cancel</Button>
-                    </FormGroup>
-                </Form>
-            </Container>
-        </div>
-    );
+                        <FormGroup>
+                            <Button color="primary" type="submit">Save</Button>
+                            <Button color="secondary">
+                                <Link to="/polls">Cancel</Link>
+                            </Button>
+                        </FormGroup>
+                    </Form>
+                </Container>
+            </div>
+        );
+    }
 
 }

@@ -7,6 +7,7 @@ import Register from './Register';
 import Login from './Login';
 import useToken from './useToken';
 import PollCreate from "./PollCreate";
+import PollEdit from "./PollEdit";
 
 
 function MyRouter() {
@@ -26,6 +27,10 @@ function MyRouter() {
             element: <PollCreate />
         },
         {
+            path: "/edit_poll/:id",
+            element: <PollEdit />
+        },
+        {
             path: "/vote/:id",
             element: <Vote />,
         },
@@ -41,19 +46,9 @@ function MyRouter() {
 }
 
 function App() {
-
-
-    /*if(!token) {
-        return <Login setToken={setToken} />
-    }*/
-
     return (
         <RouterProvider forceRefresh={true} router={MyRouter()}/>
     )
-
-
-
-
 }
 
 export default App;
