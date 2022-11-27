@@ -8,16 +8,9 @@ import useToken from "./useToken";
 
 export default function Polls() {
     const navigate = useNavigate();
-    const { token } = useToken();
+    const { token, deleteToken } = useToken();
     const [polls, setPolls] = useState([]);
-
-    const remove = async (id) => {
-        await axios.delete('http://localhost:8080/polls/'+id)
-            .then(() => {
-            let updatedPolls = [...polls].filter(i => i.pollID !== id);
-            setPolls(updatedPolls);
-        })
-    }
+    const [user, setUser] = useState([]);
 
     const handlePollCreationNav = () => {
         navigate('/create_poll', {
@@ -32,22 +25,49 @@ export default function Polls() {
         ).then((res) => res.json())
             .then((polls) => {
                 setPolls(polls);
-                console.log(polls);
+                //console.log(polls);
             });
+        if (token != null) {
+            fetch('http://localhost:8080/users/'+token.userID
+            ).then((res) => res.json())
+                .then((user) => {
+                    setUser(user);
+                });
+        }
     }, [polls]);
+
 
     const refreshPage = () => {
         window.location.reload(false);
+    }
+
+    const handleVote = (pollID) => {
+        navigate('/vote/'+pollID);
+    }
+
+    const handleEdit = (pollID) => {
+        navigate('/edit_poll/'+pollID);
+    }
+
+    const handleLogOut = () => {
+        deleteToken();
+        window.location.reload(false);
+    }
+
+    const handleLogin = () => {
+        navigate('/login');
     }
 
     if (token == null) {
         return(
             <div>
                 <AppNavbar/>
+                <br></br>
+                <div>
+                    <Button style={{flex: 'auto', width: 60, height: 30, float: 'right', color:"#00005c", marginRight: "43%"}}
+                        onClick={handleLogin}>Login</Button>{' '}
+                </div>
                 <Container fluid>
-                    <div className="float-right">
-                        <Button color="success" tag={Link} to="/users"></Button>
-                    </div>
                     <h3>Polls</h3>
                     <Table className="poll-list" width="70%" style={{textAlign:'left'}}>
                         <thead>
@@ -69,9 +89,9 @@ export default function Polls() {
                                 <td>{(poll.publicPoll) ? "Yes" : "No"}</td>
                                 <td>
                                     <div>
-                                        {poll.publicPoll && (
+                                        {(poll.publicPoll && poll.openPoll) && (
                                             <ButtonGroup>
-                                                <Button size="sm" color="primary" tag={Link} to={"/vote/" + poll.pollID}>Vote</Button>
+                                                <Button onClick={() => handleVote(poll.pollID)}>Vote</Button>
                                             </ButtonGroup>
                                         )}
                                     </div>
@@ -91,6 +111,14 @@ export default function Polls() {
         return(
             <div>
                 <AppNavbar/>
+                <div>
+                    Logged in as: {user.username}
+                </div>
+                <br></br>
+                <div>
+                    <Button style={{flex: 'auto', width: 60, height: 30, float: 'right', color:"#00005c", marginRight: "43%"}}
+                            onClick={handleLogOut}>Logout</Button>
+                </div>
                 <Container fluid>
                     <h3>Polls</h3>
                     <Table className="poll-list" width="70%" style={{textAlign:'left'}}>
@@ -117,20 +145,17 @@ export default function Polls() {
                                             <ButtonGroup>
                                                 {token.userID == poll.userID && (
                                                     <div>
-                                                        <Button size="sm" color="primary">
-                                                            <Link to={"/vote/" + poll.pollID}>Vote</Link>
-                                                        </Button>
-                                                        <Button size="sm">
-                                                            <Link to={"/edit_poll/" + poll.pollID}>Edit</Link>
-                                                        </Button>
-                                                        <Button size="sm" color="danger" onClick={() => remove(poll.pollID)}>Delete</Button>
+                                                        <Button disabled={!poll.openPoll}
+                                                                onClick={() => handleVote(poll.pollID)}>Vote</Button>
+                                                        <Button onClick={() => handleEdit(poll.pollID)}>Edit</Button>
                                                     </div>
                                                 )}
-                                                {token.userID != poll.userID && (
+                                                {(token.userID != poll.userID && poll.openPoll) && (
                                                     <div>
-                                                        <Button size="sm" color="primary">
-                                                            <Link to={"/vote/" + poll.pollID}>Vote</Link>
-                                                        </Button>
+                                                        <Button size="sm"
+                                                                color="primary"
+                                                                disabled={!poll.openPoll}
+                                                                onClick={ () => handleVote(poll.pollID)}>Vote</Button>
                                                     </div>
                                                 )}
                                             </ButtonGroup>

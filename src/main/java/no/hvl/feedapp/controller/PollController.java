@@ -45,6 +45,7 @@ public class PollController {
 
             if (newPoll.isOpenPoll()) {
                 URL url = new URL("https://dweet.io/dweet/for/polls");
+                // GET DWEETS: https://dweet.io/play/
                 HttpURLConnection con = (HttpURLConnection)url.openConnection();
                 con.setRequestMethod("POST");
                 con.setRequestProperty("Content-Type", "application/json");
@@ -63,6 +64,7 @@ public class PollController {
                         response.append(responseLine.trim());
                     }
                     System.out.println(response.toString());
+                    System.out.println("See dweets here: " + new URL("https://dweet.io/play/#!/dweets/getLatestDweet_get_2"));
                 }
             }
             return gson.toJson(new PollDTO(newPoll));

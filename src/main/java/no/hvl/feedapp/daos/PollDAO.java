@@ -33,7 +33,6 @@ public class PollDAO {
     public Poll addVote(Vote vote) {
         if (getPollByID(vote.getPoll().getID()) != null) {
             Poll poll = this.getPollByID(vote.getPoll().getID()).addVote(vote);
-            System.out.println(poll.getYesCount());
             dbService.merge(poll);
             return poll;
         }
@@ -61,9 +60,15 @@ public class PollDAO {
 
     public Poll delete(Long id) {
         Poll poll = getPollByID(id);
-        System.out.println(poll);
         if (poll != null) {
+            for (Vote vote : poll.getVotes()) {
+                vote.getUser().removeVote(vote);
+                dbService.remove(vote);
+                dbService.merge(vote.getUser());
+            }
+            poll.getFeedappuser().removePoll(poll);
             dbService.remove(poll);
+            dbService.merge(poll.getFeedappuser());
         }
         return poll;
     }

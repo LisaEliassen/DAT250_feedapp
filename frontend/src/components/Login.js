@@ -20,8 +20,9 @@ async function loginUser(credentials) {
 }
 
 export default function Login({ setToken }) {
-    const [username, setUserName] = useState();
-    const [password, setPassword] = useState();
+    const [username, setUserName] = useState([]);
+    const [password, setPassword] = useState([]);
+    const [message, setMessage] = useState([]);
 
     const navigate = useNavigate();
 
@@ -34,13 +35,12 @@ export default function Login({ setToken }) {
         });
         console.log(response);
         if (response.status == "Login failed") {
-            console.log("Wrong username or password")
+            setMessage("Wrong username or password");
             navigate("/login", { replace: true });
         }
         else if (response.status == "Login Success") {
             console.log(response.token);
             const token = response.token;
-            //const userID = tokenObj.userID;
             if (token != null) {
                 setToken(response);
 
@@ -54,7 +54,7 @@ export default function Login({ setToken }) {
             }
         }
         else {
-            console.log("Something wrong")
+            console.log("Something wrong");
             navigate("/login", { replace: true });
         }
     }
@@ -64,6 +64,9 @@ export default function Login({ setToken }) {
                 <AppNavbar/>
                 <h1>Please Log In or Register</h1>
                 <form onSubmit={handleSubmit}>
+                    <div style={{color:'red'}}>
+                        {message}
+                    </div>
                     <label>
                         <p>Username</p>
                         <input type="text" onChange={e => setUserName(e.target.value)} />
@@ -83,96 +86,3 @@ export default function Login({ setToken }) {
 Login.propTypes = {
     setToken: PropTypes.func.isRequired
 };
-
-
-class Login2 extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            loginUser: {
-                username: "",
-                password: "",
-            },
-            databaseUser: {
-                username: "",
-                password: "",
-            },
-            loggedIn: false
-        };
-
-        this.handleInputChange = this.handleInputChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
-    }
-
-    handleInputChange(event) {
-        event.preventDefault();
-        const target = event.target;
-        const property = target.name;
-        this.state.loginUser[property] = target.value;
-    }
-
-    getUser(username) {
-        let databaseUser = {
-            username: "",
-            password: ""
-        }
-        axios.get('http://localhost:8080/users/username/'+username.toString()).then(res => {
-            console.log(res.data);
-            const data = res.data;
-
-            databaseUser.username =data.username.toString()
-            databaseUser.password =data.password.toString();
-            this.state.databaseUser.username = data.username.toString();
-            this.state.databaseUser.password = data.password.toString();
-            return databaseUser;
-        });
-        return databaseUser;
-    }
-
-    handleSubmit(event) {
-        event.preventDefault();
-        const dbUser =  this.getUser(this.state.loginUser.username);
-        console.log(this.state.databaseUser);
-
-        if (dbUser.username.toString() === this.state.loginUser.username.toString()
-                && dbUser.password.toString() === this.state.loginUser.password.toString()) {
-            this.state.loggedIn = true;
-            this.props.navigate('/polls');
-        }
-        else {
-            console.log("Wrong username or password");
-        }
-    }
-
-    render() {
-        return (
-            <div>
-                <AppNavbar/>
-                <Container>
-                    <h3>Login</h3>
-                    <Form onSubmit={this.handleSubmit}>
-                        <FormGroup>
-                            <Label for="username">Username</Label>
-                            <Input type="text" name="username" id="username"
-                                   onChange={this.handleInputChange} autoComplete="username"/>
-                        </FormGroup>
-                        <FormGroup>
-                            <Label for="password">Password</Label>
-                            <Input type="text" name="password" id="password"
-                                   onChange={this.handleInputChange} autoComplete="password"/>
-                        </FormGroup>
-                        <FormGroup>
-                            <Button color="primary" type="submit">Login</Button>{' '}
-                        </FormGroup>
-                    </Form>
-                </Container>
-            </div>
-        );
-    }
-}
-
-/*export default function(props) {
-    const navigate = useNavigate();
-
-    return <Login {...props} navigate={navigate} />;
-}*/

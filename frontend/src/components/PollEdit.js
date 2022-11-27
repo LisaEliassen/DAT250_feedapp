@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import AppNavbar from "./AppNavbar";
-import {Button, Container, Form, FormGroup, Input, Label} from "reactstrap";
+import {Button, ButtonGroup, Container, Form, FormGroup, Input, Label} from "reactstrap";
 import {Link, useNavigate, useParams} from "react-router-dom";
 import useToken from "./useToken";
 import axios from "axios";
@@ -16,7 +16,6 @@ export default function PollEdit() {
         openPoll: poll.openPoll,
         publicPoll: poll.publicPoll
     }]);
-    //console.log(updatedPoll);
 
     const getPoll = async () => {
         const response = await fetch('http://localhost:8080/polls/'+ id
@@ -93,6 +92,14 @@ export default function PollEdit() {
         //console.log(updatedPoll);
     }
 
+    const deletePoll = (id) => {
+        axios.delete('http://localhost:8080/polls/'+id)
+            .then((response) => {
+                console.log(response);
+            });
+        navigate('/polls', {replace:true});
+    }
+
     if (token == null && token.userID == poll.userID) {
         return(
             <div>
@@ -118,35 +125,38 @@ export default function PollEdit() {
                     <h3>Edit poll {id}</h3>
                     <Form onSubmit={updatePoll}>
                         <FormGroup>
-                            <Label for="title">Title</Label>
-                            <Input type="text" name="title" id="title" defaultValue={poll.title || ''}
+                            <Label for="title">Title:</Label>
+                            <Input style={{flex: 'auto', marginLeft: "81px"}}
+                                   type="text" name="title" id="title" defaultValue={poll.title || ''}
                                    onChange={handleInputChange} autoComplete="title"/>
                         </FormGroup>
                         <FormGroup>
-                            <Label for="category">Category</Label>
-                            <Input type="text" name="category" id="category" defaultValue={poll.category || ''}
+                            <Label for="category">Category:</Label>
+                            <Input style={{flex: 'auto', marginLeft: "47px"}}
+                                   type="text" name="category" id="category" defaultValue={poll.category || ''}
                                    onChange={handleInputChange} autoComplete="category"/>
                         </FormGroup>
                         <FormGroup>
                             Open poll: {(updatedPoll.openPoll) ? "Yes" : "No"}
-                            <Button type="button" onClick={handleOpenPoll}>{(updatedPoll.openPoll) ? "Close poll" : "Open poll"}</Button>
+                            <Button style={{flex: 'auto', marginLeft: "14px"}}
+                                    type="button" onClick={handleOpenPoll}>{(updatedPoll.openPoll) ? "Close poll" : "Open poll"}</Button>
                             <br></br>
                             Public poll: {(updatedPoll.publicPoll) ? "Yes" : "No"}
-                            <Button type="button" onClick={handlePublicPoll}>Change to {(updatedPoll.publicPoll) ? "private" : "public"}</Button>
+                            <Button style={{flex: 'auto', marginLeft: "10px"}}
+                                    type="button" onClick={handlePublicPoll}>Change to {(updatedPoll.publicPoll) ? "private" : "public"}</Button>
                         </FormGroup>
 
                         <FormGroup>
                             <Button color="primary" type="submit">Save</Button>
-                        </FormGroup>
-                        <FormGroup>
                             <Button color="secondary">
                                 <Link to="/polls">Cancel</Link>
                             </Button>
                         </FormGroup>
-                        <FormGroup>
-                            <Button>Delete poll</Button>
-                        </FormGroup>
                     </Form>
+                    <br></br>
+                    <ButtonGroup>
+                        <Button type="button" onClick={() => deletePoll(id)}>Delete poll</Button>
+                    </ButtonGroup>
                 </Container>
             </div>
         );

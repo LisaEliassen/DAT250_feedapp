@@ -26,7 +26,6 @@ public class LoginController {
     public String getToken() {
         byte[] randomBytes = new byte[24];
         secureRandom.nextBytes(randomBytes);
-        System.out.println(base64Encoder.encodeToString(randomBytes));
         return base64Encoder.encodeToString(randomBytes);
     }
 
@@ -36,8 +35,6 @@ public class LoginController {
         FeedAppUser user = userDAO.getUserByUsername(loginRequest.getUsername());
         if (user != null) {
             if (user.getPassword().equals(loginRequest.getPassword())) {
-                System.out.println(loginRequest.getPassword());
-                System.out.println(user.getID());
                 return gson.toJson(new Token(getToken(),user.getID(), "Login Success"));
             }
         }

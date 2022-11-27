@@ -17,11 +17,11 @@ public class FeedAppUser {
     private String password;
 
     //@JsonIgnoreProperties({"feedappuser"})
-    @OneToMany(mappedBy = "feedappuser", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @OneToMany(mappedBy = "feedappuser", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     private List<Poll> polls = new ArrayList<>();
 
     //@JsonIgnoreProperties({"feedappuser"})
-    @OneToMany(mappedBy = "feedappuser", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @OneToMany(mappedBy = "feedappuser", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     private List<Vote> votes = new ArrayList<>();
 
     public Long getID() {
@@ -96,5 +96,13 @@ public class FeedAppUser {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public void removePoll(Poll poll) {
+        this.polls.remove(poll);
+    }
+
+    public void removeVote(Vote vote) {
+        this.votes.remove(vote);
     }
 }

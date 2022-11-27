@@ -49,7 +49,7 @@ export default function Vote() {
         handlePollResultNav();
     }
 
-    if (token != null) {
+    const voteDiv = () => {
         return(
             <div>
                 <AppNavbar/>
@@ -93,12 +93,13 @@ export default function Vote() {
             </div>
         );
     }
-    else {
+
+    if (!poll.openPoll) {
         return(
             <div>
                 <AppNavbar/>
                 <Container>
-                    You need to be logged in to vote!
+                    <div>You cannot vote on a closed poll!</div>
                     <br></br>
                     <Button>
                         <Link to="/login">Login</Link>
@@ -106,10 +107,41 @@ export default function Vote() {
                     <Button>
                         <Link to="/register">Sign up</Link>
                     </Button>
+                    <Button>
+                        <Link to="/polls">Go to polls</Link>
+                    </Button>
                 </Container>
             </div>
         );
     }
-
-
+    else if (poll.openPoll) {
+        if (token != null) {
+            return voteDiv();
+        }
+        else {
+            if (poll.publicPoll) {
+                return voteDiv();
+            }
+            else {
+                return(
+                    <div>
+                        <AppNavbar/>
+                        <Container>
+                            <div>You need to be logged in to vote on a private poll!</div>
+                            <br></br>
+                            <Button>
+                                <Link to="/login">Login</Link>
+                            </Button>
+                            <Button>
+                                <Link to="/register">Sign up</Link>
+                            </Button>
+                            <Button>
+                                <Link to="/polls">Go to polls</Link>
+                            </Button>
+                        </Container>
+                    </div>
+                );
+            }
+        }
+    }
 }

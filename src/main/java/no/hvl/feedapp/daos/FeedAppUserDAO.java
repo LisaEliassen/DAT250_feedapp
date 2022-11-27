@@ -34,7 +34,6 @@ public class FeedAppUserDAO {
     public FeedAppUser addPoll(Poll poll) {
         FeedAppUser user = getUserByID(poll.getFeedappuser().getID());
         if(user != null && poll != null) {
-            System.out.println(String.format("Adding poll to user with ID \"%s\"", poll.getFeedappuser().getID()));
             user.addPoll(poll);
             dbService.merge(user);
             return user;

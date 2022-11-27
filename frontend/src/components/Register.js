@@ -75,12 +75,12 @@ class Register extends React.Component {
                         </FormGroup>
                         <FormGroup>
                             <Label for="password">Password</Label>
-                            <Input type="text" name="password" id="password"
+                            <Input type="password" name="password" id="password"
                                    onChange={this.handleInputChange} autoComplete="password"/>
                         </FormGroup>
                         <FormGroup>
                             <Label for="passwordVerify">Confirm Password</Label>
-                            <Input type="text" name="passwordVerify" id="passwordVerify"
+                            <Input type="password" name="passwordVerify" id="passwordVerify"
                                    onChange={this.handleInputChange} autoComplete="passwordVerify"/>
                         </FormGroup>
                         <FormGroup>

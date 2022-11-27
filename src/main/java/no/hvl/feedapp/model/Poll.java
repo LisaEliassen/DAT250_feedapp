@@ -21,10 +21,10 @@ public class Poll {
     @ManyToOne(targetEntity = FeedAppUser.class)
     private FeedAppUser feedappuser;
 
-    @OneToMany(mappedBy = "poll", targetEntity = Vote.class, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @OneToMany(mappedBy = "poll", targetEntity = Vote.class, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     private List<Vote> votes = new ArrayList<>();
 
-    @OneToMany(mappedBy = "poll", targetEntity = IOTDevice.class, cascade ={CascadeType.PERSIST, CascadeType.MERGE})
+    @OneToMany(mappedBy = "poll", targetEntity = IOTDevice.class, cascade ={CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     private List<IOTDevice> iots = new ArrayList<>();
 
 
@@ -32,9 +32,7 @@ public class Poll {
     public Poll addVote(Vote vote) {
         this.votes.add(vote);
 
-
         if (vote.getVote().equals("Yes")) {
-            System.out.println("The vote equals Yes");
             this.addYesVote();
             return this;
         }
@@ -42,7 +40,6 @@ public class Poll {
             this.addNoVote();
             return this;
         }
-        System.out.println("Neither yes or no");
         return this;
     }
 
