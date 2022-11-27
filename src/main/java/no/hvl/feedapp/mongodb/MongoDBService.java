@@ -42,7 +42,6 @@ public class MongoDBService {
                 System.out.println(name);
             }
 
-
     }
 
     public MongoDatabase getDatabase() {
@@ -67,7 +66,7 @@ public class MongoDBService {
                 var doc = cur.next();
                 var polls = new ArrayList < > (doc.values());
 
-                System.out.printf("PollID: %s. Title: %s. Result: %s.%n", polls.get(0), polls.get(1), polls.get(2));
+                System.out.printf("PollID: %s. Title: %s. Result: %s.%n", polls.get(1), polls.get(2), polls.get(3));
             }
         }
     }
@@ -130,7 +129,7 @@ public class MongoDBService {
                 var doc = cur.next();
                 var polls = new ArrayList < > (doc.values());
 
-                System.out.printf("PollID: %s. Title: %s. Result: %s.%n", polls.get(0), polls.get(1), polls.get(2));
+                System.out.printf("PollID: %s. Title: %s. Result: %s.%n", polls.get(1), polls.get(2), polls.get(3));
             }
         }
     }
