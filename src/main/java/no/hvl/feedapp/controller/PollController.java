@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
 public class PollController {
     Gson gson = new Gson();
     final DatabaseService dbService = new DatabaseService();
-    final MongoDBService mDbService = new MongoDBService();
+    MongoDBService mDbService = new MongoDBService();
     final PollDAO pollDAO = new PollDAO(dbService);
     final FeedAppUserDAO userDAO = new FeedAppUserDAO(dbService);
     final IOTDeviceDAO deviceDAO = new IOTDeviceDAO(dbService);
@@ -44,7 +44,6 @@ public class PollController {
             pollDAO.create(newPoll);
             userDAO.addPoll(newPoll);
             //MongoDB
-            mDbService.createCollection("test");
             Document newDoc = mDbService.createDoc(newPoll);
             mDbService.addOneDocument(newDoc, "test");
 

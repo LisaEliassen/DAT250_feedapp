@@ -19,7 +19,8 @@ public class MongoDBService {
     private MongoDatabase database;
 
     public MongoDBService () {
-        try (var mongoClient = MongoClients.create("mongodb://localhost:27017")) {
+
+            var mongoClient = MongoClients.create("mongodb://localhost:27017");
 
             // Must use mongosh first (command: use testDB) if database not yet created
             String myDatabase = "testDB";
@@ -27,12 +28,20 @@ public class MongoDBService {
 
             System.out.println("database name -> " + this.database.getName());
 
+            try {
+                // Name the collection
+                this.database.createCollection("test");
+                System.out.println("Collection created successfully");
+            } catch (MongoCommandException e) {
+                this.database.getCollection("test").drop();
+            }
+
             // Print the collection names inside the database
             for (String name: this.database.listCollectionNames()) {
 
                 System.out.println(name);
             }
-        }
+
 
     }
 
@@ -48,16 +57,6 @@ public class MongoDBService {
         // Drop it
         this.database.drop();
         System.out.println("Database which is dropped: " + myDatabase );
-    }
-
-    public void createCollection(String myCollection) {
-        try {
-            // Name the collection
-            this.database.createCollection(myCollection);
-            System.out.println("Collection created successfully");
-        } catch (MongoCommandException e) {
-            this.database.getCollection(myCollection).drop();
-        }
     }
 
     public void readCollection(String myCollection) {
