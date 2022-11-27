@@ -22,6 +22,7 @@ public class ReceiveLogs {
         System.out.println(" [*] Waiting for messages. To exit press CTRL+C");
 
         // Todo: change the code to receive the messages of the correct format
+        // Here we have to receive the poll updates
         DeliverCallback deliverCallback = (consumerTag, delivery) -> {
                 String message = new String(delivery.getBody(), "UTF-8");
         System.out.println(" [x] Received '" + message + "'");

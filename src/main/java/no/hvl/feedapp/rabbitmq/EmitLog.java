@@ -15,6 +15,7 @@ public class EmitLog {
             channel.exchangeDeclare(EXCHANGE_NAME, BuiltinExchangeType.FANOUT);
 
             // Todo: change what is sent to the ReceiveLogs class
+            // Here we have to send the poll updates to the correct subscriber
             for (int i = 0; i < 10; i++) {
                 String message = "Hello world message - " + i;
                 channel.basicPublish(EXCHANGE_NAME, "", null, message.getBytes("UTF-8"));

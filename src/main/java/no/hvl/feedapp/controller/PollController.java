@@ -10,6 +10,7 @@ import no.hvl.feedapp.model.FeedAppUser;
 import no.hvl.feedapp.model.Poll;
 import no.hvl.feedapp.mongodb.MongoDBService;
 import no.hvl.feedapp.util.DatabaseService;
+import org.bson.Document;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -42,6 +43,10 @@ public class PollController {
             Poll newPoll = poll.setUser(userDAO.getUserByID(Long.valueOf(userID)));
             pollDAO.create(newPoll);
             userDAO.addPoll(newPoll);
+            //MongoDB
+            mDbService.createCollection("test");
+            Document newDoc = mDbService.createDoc(newPoll);
+            mDbService.addOneDocument(newDoc, "test");
 
             if (newPoll.isOpenPoll()) {
                 URL url = new URL("https://dweet.io/dweet/for/polls");
@@ -133,6 +138,10 @@ public class PollController {
             }
 
             if (poll != null) {
+                //MongoDB
+                Document oldPoll = mDbService.createDoc(previousPoll);
+                Document newPoll = mDbService.createDoc(poll);
+                mDbService.updateDocument("test", newPoll, oldPoll);
                 return gson.toJson(new PollDTO(poll));
             }
             else {
@@ -148,6 +157,8 @@ public class PollController {
     public String deletePoll(@PathVariable("id") String id) {
         if(dbService.isNumber(id)) {
             Poll poll = pollDAO.delete(Long.valueOf(id));
+            //MongoDB
+            mDbService.deleteDocument("test", Long.valueOf(id));
             if (poll != null) {
                 return gson.toJson("Success!");
             }

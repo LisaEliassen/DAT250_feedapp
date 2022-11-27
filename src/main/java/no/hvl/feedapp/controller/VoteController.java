@@ -1,6 +1,7 @@
 package no.hvl.feedapp.controller;
 
 import com.google.gson.Gson;
+import com.mongodb.client.MongoDatabase;
 import no.hvl.feedapp.daos.FeedAppUserDAO;
 import no.hvl.feedapp.daos.IOTDeviceDAO;
 import no.hvl.feedapp.daos.PollDAO;
@@ -8,8 +9,11 @@ import no.hvl.feedapp.daos.VoteDAO;
 import no.hvl.feedapp.dtos.IOTDeviceDTO;
 import no.hvl.feedapp.dtos.VoteDTO;
 import no.hvl.feedapp.model.IOTDevice;
+import no.hvl.feedapp.model.Poll;
 import no.hvl.feedapp.model.Vote;
+import no.hvl.feedapp.mongodb.MongoDBService;
 import no.hvl.feedapp.util.DatabaseService;
+import org.bson.Document;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,6 +26,7 @@ public class VoteController {
     Gson gson = new Gson();
 
     final DatabaseService dbService = new DatabaseService();
+    final MongoDBService mDbService = new MongoDBService();
     final VoteDAO voteDAO = new VoteDAO(dbService);
     final FeedAppUserDAO userDAO = new FeedAppUserDAO(dbService);
     final PollDAO pollDAO = new PollDAO(dbService);
@@ -37,7 +42,13 @@ public class VoteController {
                 newVote = newVote.setPoll(pollDAO.getPollByID(Long.valueOf(pollID)));
                 voteDAO.create(newVote);
                 userDAO.addVote(newVote);
-                pollDAO.addVote(newVote);
+
+                Document oldPoll = mDbService.createDoc(newVote.getPoll());
+
+                Poll poll = pollDAO.addVote(newVote);
+
+                Document newPoll = mDbService.createDoc(poll);
+                mDbService.updateDocument("test", newPoll, oldPoll);
 
                 return gson.toJson(new VoteDTO(newVote));
             }
@@ -63,7 +74,13 @@ public class VoteController {
                 newVote = newVote.setPoll(pollDAO.getPollByID(Long.valueOf(pollID)));
                 voteDAO.create(newVote);
                 deviceDAO.addVote(newVote);
-                pollDAO.addVote(newVote);
+
+                Document oldPoll = mDbService.createDoc(newVote.getPoll());
+
+                Poll poll = pollDAO.addVote(newVote);
+
+                Document newPoll = mDbService.createDoc(poll);
+                mDbService.updateDocument("test", newPoll, oldPoll);
 
                 return gson.toJson(new VoteDTO(newVote));
             }
