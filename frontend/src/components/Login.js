@@ -45,12 +45,7 @@ export default function Login({ setToken }) {
                 setToken(response);
 
                 console.log("Logged in!")
-                navigate('/polls', {
-                    state: {
-                        token: response,
-                    }
-                });
-                //navigate("/polls", { replace: true });
+                navigate("/polls", { replace: true });
             }
         }
         else {

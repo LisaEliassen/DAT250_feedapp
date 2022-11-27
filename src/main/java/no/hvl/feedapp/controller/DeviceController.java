@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = {"http://localhost:3000", "http://localhost:3001"})
 //@Controller
 public class DeviceController {
     Gson gson = new Gson();
@@ -24,11 +24,16 @@ public class DeviceController {
     final PollDAO pollDAO = new PollDAO(dbService);
 
     @PostMapping("/devices/{pollID}")
-    public String createDevice(@RequestBody IOTDevice iot, @PathVariable("pollID") String pollID) {
-        IOTDevice device = iot.setPoll(pollDAO.getPollByID(Long.valueOf(pollID)));
-        iotDAO.create(iot);
-        pollDAO.addDevice(device);
-        return gson.toJson(new IOTDeviceDTO(iot));
+    public String createDevice(@PathVariable("pollID") String pollID) {
+        if (pollDAO.getPollByID(Long.valueOf(pollID)) != null) {
+            IOTDevice device = (new IOTDevice()).setPoll(pollDAO.getPollByID(Long.valueOf(pollID)));
+            iotDAO.create(device);
+            pollDAO.addDevice(device);
+            return gson.toJson(new IOTDeviceDTO(device));
+        }
+        else {
+            return String.format("Poll with the id \"%s\" not found!", pollID);
+        }
     }
 
     @GetMapping("/devices")

@@ -3,12 +3,13 @@ package no.hvl.feedapp.util;
 public class Token {
     private String status;
     private String token;
-
     private Long userID;
+    private Long deviceID;
 
-    public Token(String token, Long userID, String status) {
+    public Token(String token, Long userID, Long deviceID, String status) {
         setToken(token);
         setUserID(userID);
+        setDeviceID(deviceID);
         setStatus(status);
     }
     public String getToken() {
@@ -32,4 +33,13 @@ public class Token {
     public void setStatus(String status) {
         this.status = status;
     }
+
+    public Long getDeviceID() {
+        return deviceID;
+    }
+
+    public void setDeviceID(Long deviceID) {
+        this.deviceID = deviceID;
+    }
+
 }

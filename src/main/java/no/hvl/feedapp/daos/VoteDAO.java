@@ -37,9 +37,7 @@ public class VoteDAO {
         Vote vote = (Vote) dbService.find(Vote.class, id);
         return vote;
     }
-
-
-
+    
     public Vote delete(Long id) {
         Vote vote = getVoteByID(id);
         if (vote != null) {
