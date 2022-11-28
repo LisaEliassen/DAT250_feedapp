@@ -1,5 +1,8 @@
 package no.hvl.feedapp.rabbitmq;
 
+import java.util.List;
+import java.util.Scanner;
+
 public class MessagingService {
 
     public static void main(String[] args) throws Exception {
