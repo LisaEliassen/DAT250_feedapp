@@ -5,7 +5,7 @@ import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.DeliverCallback;
 
-public class ReceiveLogsTopic {
+public class Receiver {
 
     private static final String EXCHANGE_NAME = "topic_logs";
 
@@ -19,7 +19,7 @@ public class ReceiveLogsTopic {
         String queueName = channel.queueDeclare().getQueue();
 
         if (argv.length < 1) {
-            System.err.println("Usage: ReceiveLogsTopic [binding_key]...");
+            System.err.println("Usage: Receiver [binding_key]...");
             System.exit(1);
         }
 

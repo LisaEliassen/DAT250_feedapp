@@ -1,6 +1,5 @@
 package no.hvl.feedapp.rabbitmq;
 
-import java.util.List;
 import java.util.Scanner;
 
 public class MessagingService {
@@ -12,6 +11,6 @@ public class MessagingService {
         String input = sc.nextLine();
         String[] pollIDs = input.split(" ");
 
-        ReceiveLogsTopic.main(pollIDs);
+        Receiver.main(pollIDs);
     }
 }

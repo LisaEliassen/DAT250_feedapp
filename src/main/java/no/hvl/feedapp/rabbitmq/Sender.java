@@ -10,10 +10,9 @@ import org.bson.Document;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-public class EmitLogTopic {
+public class Sender {
 
     private static final String EXCHANGE_NAME = "topic_logs";
 

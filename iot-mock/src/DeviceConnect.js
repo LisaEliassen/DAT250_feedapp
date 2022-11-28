@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from "react";
-import axios from "axios";
-import {Button, Container, Form, FormGroup, Input, Label} from "reactstrap";
-import {Link, useNavigate} from "react-router-dom";
+import {Button, Form, FormGroup, Input, Label} from "reactstrap";
+import {useNavigate} from "react-router-dom";
 import useToken from "./useToken";
 
 async function connectDevice(credentials) {
