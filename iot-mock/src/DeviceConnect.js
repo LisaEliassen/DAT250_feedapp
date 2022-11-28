@@ -16,22 +16,25 @@ async function connectDevice(credentials) {
 }
 
 function DeviceConnect() {
-    const [device, setDevice] = useState([]);
     const [pollID, setPollID] = useState();
     const [poll, setPoll] = useState([]);
     const { token, setToken } = useToken();
     const navigate = useNavigate();
+    const [message, setMessage] = useState([]);
 
     useEffect(() => {
         if (pollID != null && pollID != undefined && !isNaN(pollID)) {
             fetch('http://localhost:8080/polls/'+pollID
             ).then((res) => res.json())
                 .then((poll) => {
+                    setMessage("");
                     setPoll(poll);
-                });
+                }).catch(error => {
+                setMessage("Poll with given ID does not exist!");
+                console.log(error.response)
+            });
         }
-
-    }, [poll, pollID, device]);
+    }, [poll, pollID]);
 
     const handleInputChange = (event) => {
         setPollID(event.target.value);
@@ -41,20 +44,33 @@ function DeviceConnect() {
         console.log("Creating device...")
         const json = {
         }
-        return fetch('http://localhost:8080/devices/'+id, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(json)}
-        ).then((res) => res.json());
+        if (pollID != null && pollID != undefined && !isNaN(pollID)) {
+            return fetch('http://localhost:8080/devices/'+id, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(json)}
+            ).then((res) => res.json());
+        }
+        else {
+            setMessage("Poll with given ID does not exist!");
+            return false;
+        }
+
     }
 
     const handleSubmit = async e => {
         e.preventDefault();
+        if (isNaN(pollID)) {
+            console.log("Not a number")
+        }
         const device = await createDevice(pollID);
         console.log(device);
-        if (device != null && device !== undefined) {
+        if (device == false) {
+            navigate("/");
+        }
+        else if (device != null && device !== undefined) {
             let deviceID = device.deviceID;
             console.log(device);
             const response = await connectDevice({
@@ -64,7 +80,6 @@ function DeviceConnect() {
             console.log(response);
 
             if (response.status == "Connection failed") {
-                //setMessage("Device does not exist?");
                 console.log("Connection failed!")
                 navigate("/", { replace: true });
             }
@@ -80,12 +95,12 @@ function DeviceConnect() {
             }
             else {
                 console.log("Something wrong");
-                //navigate("/", { replace: true });
+                navigate("/", { replace: true });
             }
         }
         else {
             console.log("Cannot create device");
-            //navigate("/", { replace: true });
+            navigate("/", { replace: true });
         }
     }
 
@@ -93,6 +108,9 @@ function DeviceConnect() {
         <div>
             <h3>Connect to poll</h3>
             <Form onSubmit={handleSubmit}>
+                <div style={{color:'red'}}>
+                    {message}
+                </div>
                 <FormGroup>
                     <Label for="pollID">Please give poll ID:</Label>
                     <Input type="text" name="pollID" id="pollID"

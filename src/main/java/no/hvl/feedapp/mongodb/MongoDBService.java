@@ -1,7 +1,5 @@
 package no.hvl.feedapp.mongodb;
 
-import com.mongodb.Mongo;
-import com.mongodb.MongoClient;
 import com.mongodb.MongoCommandException;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
@@ -26,21 +24,24 @@ public class MongoDBService {
             String myDatabase = "testDB";
             this.database = mongoClient.getDatabase(myDatabase);
 
-            System.out.println("database name -> " + this.database.getName());
+            //System.out.println("database name -> " + this.database.getName());
 
             try {
+                boolean collectionExists = this.database.listCollectionNames()
+                        .into(new ArrayList<>()).contains("test");
                 // Name the collection
-                this.database.createCollection("test");
-                System.out.println("Collection created successfully");
+                if (!collectionExists) {
+                    this.database.createCollection("test");
+                    System.out.println("Collection created successfully");
+                }
             } catch (MongoCommandException e) {
                 this.database.getCollection("test").drop();
             }
 
             // Print the collection names inside the database
-            for (String name: this.database.listCollectionNames()) {
-
+            /*for (String name: this.database.listCollectionNames()) {
                 System.out.println(name);
-            }
+            }*/
 
     }
 
@@ -58,17 +59,10 @@ public class MongoDBService {
         System.out.println("Database which is dropped: " + myDatabase );
     }
 
-    public void readCollection(String myCollection) {
-        MongoCollection <Document> collection = this.database.getCollection(myCollection);
+    public MongoCollection<Document> readCollection(String myCollection) {
+        MongoCollection<Document> collection = this.database.getCollection(myCollection);
 
-        try (MongoCursor < Document > cur = collection.find().iterator()) {
-            while (cur.hasNext()) {
-                var doc = cur.next();
-                var polls = new ArrayList < > (doc.values());
-
-                System.out.printf("PollID: %s. Title: %s. Result: %s.%n", polls.get(1), polls.get(2), polls.get(3));
-            }
-        }
+        return collection;
     }
 
     public void dropCollection(String myCollection) {
@@ -115,7 +109,7 @@ public class MongoDBService {
         return doc;
     }
 
-    public void updateDocument(String myCollection, Document newDocument, Document oldDocument) {
+    public ArrayList<Object> updateDocument(String myCollection, Document newDocument, Document oldDocument) {
         // Retrieving a collection
         MongoCollection <Document> collection = this.database.getCollection(myCollection);
 
@@ -127,11 +121,12 @@ public class MongoDBService {
         try (MongoCursor <Document> cur = collection.find().iterator()) {
             while (cur.hasNext()) {
                 var doc = cur.next();
-                var polls = new ArrayList < > (doc.values());
-
-                System.out.printf("PollID: %s. Title: %s. Result: %s.%n", polls.get(1), polls.get(2), polls.get(3));
+                var poll = new ArrayList <> (doc.values());
+                System.out.printf("PollID: %s. Title: %s. Result: %s.%n", poll.get(1), poll.get(2), poll.get(3));
+                return poll;
             }
         }
+        return null;
     }
 
 }

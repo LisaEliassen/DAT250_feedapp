@@ -6,8 +6,12 @@ import java.util.Scanner;
 public class MessagingService {
 
     public static void main(String[] args) throws Exception {
-        String[] argv = {"Hello", "World", "YOLO"};
-        ReceiveLogsTopic.main(argv);
-        EmitLogTopic.main(argv);
+
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Enter ID of polls you want to sub (separate multiple IDs with blank space): ");
+        String input = sc.nextLine();
+        String[] pollIDs = input.split(" ");
+
+        ReceiveLogsTopic.main(pollIDs);
     }
 }
