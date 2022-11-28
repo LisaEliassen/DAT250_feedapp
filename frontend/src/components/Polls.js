@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from "react";
-import axios from "axios";
 import AppNavbar from './AppNavbar';
-import { Link, useLocation, useNavigate} from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 
 import {Button, ButtonGroup, Container, Table} from "reactstrap";
 import useToken from "./useToken";

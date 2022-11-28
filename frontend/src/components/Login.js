@@ -1,12 +1,7 @@
 import React, {useState} from "react";
-import axios from "axios";
 import AppNavbar from "./AppNavbar";
 import PropTypes from 'prop-types';
-import {Button, Container, Form, FormGroup, Input, Label} from "reactstrap";
-import Polls from "./Polls";
-import {useNavigate} from "react-router-dom";
-import Register from "./Register";
-
+import {useNavigate} from "react-router-dom"
 
 async function loginUser(credentials) {
     return fetch('http://localhost:8080/login', {

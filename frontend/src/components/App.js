@@ -1,6 +1,5 @@
-import React, { Component, useState} from 'react';
 import Home from './Home';
-import {BrowserRouter as Router, createBrowserRouter, Route, RouterProvider, Switch} from 'react-router-dom';
+import {createBrowserRouter, RouterProvider} from 'react-router-dom';
 import Polls from './Polls';
 import Vote from './Vote';
 import Register from './Register';

@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import AppNavbar from "./AppNavbar";
-import {Button, Container, Form, FormGroup, Input, Label} from "reactstrap";
+import {Button, Container, Form, FormGroup} from "reactstrap";
 import {Link, useNavigate, useParams} from "react-router-dom";
 import useToken from "./useToken";
 import axios from "axios";

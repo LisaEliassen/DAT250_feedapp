@@ -1,8 +1,8 @@
-import {Link, useNavigate, useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import useToken from "./useToken";
 import React, {useEffect, useState} from "react";
 import AppNavbar from "./AppNavbar";
-import {Button, ButtonGroup, Container, Table} from "reactstrap";
+import {Button, Container} from "reactstrap";
 
 
 export default function PollResult() {
