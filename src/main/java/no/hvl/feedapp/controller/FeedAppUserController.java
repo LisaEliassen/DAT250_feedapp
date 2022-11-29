@@ -3,11 +3,8 @@ package no.hvl.feedapp.controller;
 import com.google.gson.Gson;
 import no.hvl.feedapp.daos.FeedAppUserDAO;
 import no.hvl.feedapp.dtos.FeedAppUserDTO;
-import no.hvl.feedapp.dtos.IOTDeviceDTO;
 import no.hvl.feedapp.model.FeedAppUser;
-import no.hvl.feedapp.model.IOTDevice;
 import no.hvl.feedapp.util.DatabaseService;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,17 +12,15 @@ import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin(origins = {"http://localhost:3000", "http://localhost:3001"})
-//@Controller
 public class FeedAppUserController {
     Gson gson = new Gson();
 
-    final DatabaseService dbService = new DatabaseService();
+    final DatabaseService<FeedAppUser> dbService = new DatabaseService<>();
     final FeedAppUserDAO userDAO = new FeedAppUserDAO(dbService);
 
     @PostMapping("/users")
     public String createUser(@RequestBody FeedAppUser user) {
         userDAO.create(user);
-
         return gson.toJson(new FeedAppUserDTO(user));
     }
 

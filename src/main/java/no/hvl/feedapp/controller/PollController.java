@@ -27,15 +27,13 @@ import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin(origins = {"http://localhost:3000", "http://localhost:3001"})
-//@Controller
 public class PollController {
-    Gson gson = new Gson();
-    final DatabaseService dbService = new DatabaseService();
-    MongoDBService mDbService = new MongoDBService();
-    final PollDAO pollDAO = new PollDAO(dbService);
-    final FeedAppUserDAO userDAO = new FeedAppUserDAO(dbService);
-    final IOTDeviceDAO deviceDAO = new IOTDeviceDAO(dbService);
-    final VoteDAO voteDAO = new VoteDAO(dbService);
+    final Gson gson = new Gson();
+    final DatabaseService<Poll> dbServicePoll = new DatabaseService<>();
+    final DatabaseService<FeedAppUser> dbServiceUser = new DatabaseService<>();
+    final MongoDBService mDbService = new MongoDBService();
+    final PollDAO pollDAO = new PollDAO(dbServicePoll);
+    final FeedAppUserDAO userDAO = new FeedAppUserDAO(dbServiceUser);
 
     @PostMapping("/polls/{userID}")
     public String createPoll(@RequestBody Poll poll, @PathVariable("userID") String userID) throws IOException {
@@ -90,7 +88,7 @@ public class PollController {
 
     @GetMapping(value = "polls/{id}")
     public String getPollByID(@PathVariable("id") String id) {
-        if (dbService.isNumber(id)) { // check if id is a number
+        if (dbServicePoll.isNumber(id)) { // check if id is a number
             Poll poll = pollDAO.getPollByID(Long.valueOf(id));
             if (poll != null) {
                 return gson.toJson(new PollDTO(poll));
@@ -108,7 +106,7 @@ public class PollController {
             @RequestBody Poll editedPoll) throws IOException {
 
         // check if id is a number
-        if (dbService.isNumber(id)) {
+        if (dbServicePoll.isNumber(id)) {
             Poll previousPoll = pollDAO.getPollByID(Long.valueOf(id));
             Poll poll = pollDAO.update(editedPoll, Long.valueOf(id));
 
@@ -154,7 +152,7 @@ public class PollController {
 
     @DeleteMapping(value = "polls/{id}")
     public String deletePoll(@PathVariable("id") String id) {
-        if(dbService.isNumber(id)) {
+        if(dbServicePoll.isNumber(id)) {
             Poll poll = pollDAO.delete(Long.valueOf(id));
             //MongoDB
             mDbService.deleteDocument("test", Long.valueOf(id));
@@ -172,7 +170,7 @@ public class PollController {
 
     @GetMapping(value = "result/{id}")
     public String getPollResultByID(@PathVariable("id") String id) {
-        if (dbService.isNumber(id)) { // check if id is a number
+        if (dbServicePoll.isNumber(id)) { // check if id is a number
             Poll poll = pollDAO.getPollByID(Long.valueOf(id));
             if (poll != null) {
                 return gson.toJson(poll.getResult());

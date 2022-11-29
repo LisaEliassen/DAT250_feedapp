@@ -7,7 +7,6 @@ import no.hvl.feedapp.dtos.IOTDeviceDTO;
 import no.hvl.feedapp.model.IOTDevice;
 import no.hvl.feedapp.model.Poll;
 import no.hvl.feedapp.util.DatabaseService;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,13 +14,14 @@ import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin(origins = {"http://localhost:3000", "http://localhost:3001"})
-//@Controller
 public class DeviceController {
     Gson gson = new Gson();
 
-    final DatabaseService dbService = new DatabaseService();
-    final IOTDeviceDAO iotDAO = new IOTDeviceDAO(dbService);
-    final PollDAO pollDAO = new PollDAO(dbService);
+    final DatabaseService<IOTDevice> dbServiceDevice = new DatabaseService<>();
+    final DatabaseService<Poll> dbServicePoll = new DatabaseService<>();
+
+    final IOTDeviceDAO iotDAO = new IOTDeviceDAO(dbServiceDevice);
+    final PollDAO pollDAO = new PollDAO(dbServicePoll);
 
     @PostMapping("/devices/{pollID}")
     public String createDevice(@PathVariable("pollID") String pollID) {
@@ -52,7 +52,7 @@ public class DeviceController {
 
     @GetMapping(value = "devices/{id}")
     public String getDeviceByID(@PathVariable("id") String id) {
-        if (dbService.isNumber(id)) { // check if id is a number
+        if (dbServiceDevice.isNumber(id)) { // check if id is a number
             IOTDevice iot = iotDAO.getDeviceByID(Long.valueOf(id));
             if (iot != null) {
                 return gson.toJson(new IOTDeviceDTO(iot));
@@ -70,7 +70,7 @@ public class DeviceController {
             @RequestBody IOTDevice editedIoT) {
 
         // check if id is a number
-        if (dbService.isNumber(id)) {
+        if (dbServiceDevice.isNumber(id)) {
             IOTDevice iot = iotDAO.update(editedIoT, Long.valueOf(id));
 
             if (iot != null) {
@@ -87,7 +87,7 @@ public class DeviceController {
 
     @DeleteMapping(value = "devices/{id}")
     public String deleteDevice(@PathVariable("id") String id) {
-        if(dbService.isNumber(id)) {
+        if(dbServiceDevice.isNumber(id)) {
             IOTDevice iot = iotDAO.delete(Long.valueOf(id));
             if (iot != null) {
                 return gson.toJson("Success!");

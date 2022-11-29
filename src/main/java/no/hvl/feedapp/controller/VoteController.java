@@ -21,16 +21,17 @@ import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin(origins = {"http://localhost:3000", "http://localhost:3001"})
-//@Controller
 public class VoteController {
-    Gson gson = new Gson();
-
-    final DatabaseService dbService = new DatabaseService();
+    final Gson gson = new Gson();
+    final DatabaseService<Vote> dbServiceVote = new DatabaseService<>();
+    final DatabaseService<Vote> dbServiceUser = new DatabaseService<>();
+    final DatabaseService<Vote> dbServicePoll = new DatabaseService<>();
+    final DatabaseService<Vote> dbServiceDevice = new DatabaseService<>();
     final MongoDBService mDbService = new MongoDBService();
-    final VoteDAO voteDAO = new VoteDAO(dbService);
-    final FeedAppUserDAO userDAO = new FeedAppUserDAO(dbService);
-    final PollDAO pollDAO = new PollDAO(dbService);
-    final IOTDeviceDAO deviceDAO = new IOTDeviceDAO(dbService);
+    final VoteDAO voteDAO = new VoteDAO(dbServiceVote);
+    final FeedAppUserDAO userDAO = new FeedAppUserDAO(dbServiceUser);
+    final PollDAO pollDAO = new PollDAO(dbServicePoll);
+    final IOTDeviceDAO deviceDAO = new IOTDeviceDAO(dbServiceDevice);
 
     @PostMapping("/votes/{pollID}/{userID}")
     public String createUserVote(@RequestBody Vote vote,
@@ -100,7 +101,7 @@ public class VoteController {
 
     @GetMapping(value = "votes/{id}")
     public String getVoteByID(@PathVariable("id") String id) {
-        if (dbService.isNumber(id)) { // check if id is a number
+        if (dbServiceVote.isNumber(id)) { // check if id is a number
             Vote vote = voteDAO.getVoteByID(Long.valueOf(id));
             if (vote != null) {
                 return gson.toJson(new VoteDTO(vote));
@@ -118,7 +119,7 @@ public class VoteController {
             @RequestBody Vote editedVote) {
 
         // check if id is a number
-        if (dbService.isNumber(id)) {
+        if (dbServiceVote.isNumber(id)) {
             Vote vote = voteDAO.update(editedVote, Long.valueOf(id));
 
             if (vote != null) {
@@ -135,7 +136,7 @@ public class VoteController {
 
     @DeleteMapping(value = "votes/{id}")
     public String deleteVote(@PathVariable("id") String id) {
-        if(dbService.isNumber(id)) {
+        if(dbServiceVote.isNumber(id)) {
             Vote vote = voteDAO.delete(Long.valueOf(id));
             if (vote != null) {
                 return gson.toJson("Success!");

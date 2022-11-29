@@ -14,18 +14,16 @@ import org.springframework.web.bind.annotation.*;
 import java.security.SecureRandom;
 import java.util.Base64;
 
-
 @RestController
 @CrossOrigin(origins = {"http://localhost:3000", "http://localhost:3001"})
 public class LoginController {
     private static final SecureRandom secureRandom = new SecureRandom(); //threadsafe
     private static final Base64.Encoder base64Encoder = Base64.getUrlEncoder();
-    final DatabaseService dbService = new DatabaseService();
-
-    final FeedAppUserDAO userDAO = new FeedAppUserDAO(dbService);
-    final IOTDeviceDAO deviceDAO = new IOTDeviceDAO(dbService);
-    Gson gson = new Gson();
-
+    final DatabaseService<FeedAppUser> dbServiceUser = new DatabaseService<>();
+    final DatabaseService<IOTDevice> dbServiceDevice = new DatabaseService<>();
+    final FeedAppUserDAO userDAO = new FeedAppUserDAO(dbServiceUser);
+    final IOTDeviceDAO deviceDAO = new IOTDeviceDAO(dbServiceDevice);
+    final Gson gson = new Gson();
 
     public String getToken() {
         byte[] randomBytes = new byte[24];
