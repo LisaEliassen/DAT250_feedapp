@@ -11,7 +11,7 @@ export default function PollCreate() {
     const navigate = useNavigate();
     const { token } = useToken();
     let poll = {
-        title: "",
+        question: "",
         category: "",
         openPoll: false,
         publicPoll: false
@@ -19,7 +19,7 @@ export default function PollCreate() {
 
     const sendPoll = () => {
         const json = JSON.stringify({
-            title: poll.title,
+            question: poll.question,
             category: poll.category,
             openPoll: poll.openPoll,
             publicPoll: poll.publicPoll
@@ -52,8 +52,6 @@ export default function PollCreate() {
             else {
                 poll[parameter] = false;
             }
-            console.log(poll[parameter]);
-            console.log(target.checked)
         }
         else {
             event.preventDefault();
@@ -86,24 +84,28 @@ export default function PollCreate() {
                     <h3>Create a poll</h3>
                     <Form onSubmit={sendPoll}>
                         <FormGroup>
-                            <Label for="title">Title</Label>
-                            <Input type="text" name="title" id="title"
-                                   onChange={handleInputChange} autoComplete="title"/>
+                            <Label for="question">Question:</Label>
+                            <Input style={{flex: 'auto', marginLeft: "25px"}}
+                                type="text" name="question" id="question"
+                                onChange={handleInputChange} autoComplete="title"/>
                         </FormGroup>
                         <FormGroup>
-                            <Label for="category">Category</Label>
-                            <Input type="text" name="category" id="category"
-                                   onChange={handleInputChange} autoComplete="category"/>
+                            <Label for="category">Category:</Label>
+                            <Input style={{flex: 'auto', marginLeft: "25px"}}
+                                type="text" name="category" id="category"
+                                onChange={handleInputChange} autoComplete="category"/>
                         </FormGroup>
                         <FormGroup>
-                            <Label for="openPoll">Open Poll</Label>
-                            <Input type="checkbox" name="openPoll" id="openPoll" defaultChecked={false}
-                                   onChange={handleInputChange} autoComplete="openPoll"/>
+                            <Label for="openPoll">Open Poll:</Label>
+                            <Input style={{flex: 'auto', marginLeft: "20px"}}
+                                type="checkbox" name="openPoll" id="openPoll" defaultChecked={false}
+                                onChange={handleInputChange} autoComplete="openPoll"/>
                         </FormGroup>
                         <FormGroup>
-                            <Label for="publicPoll">Public Poll</Label>
-                            <Input type="checkbox" name="publicPoll" id="publicPoll" defaultChecked={false}
-                                   onChange={handleInputChange} autoComplete="publicPoll"/>
+                            <Label for="publicPoll">Public Poll:</Label>
+                            <Input style={{flex: 'auto', marginLeft: "16.5px"}}
+                                type="checkbox" name="publicPoll" id="publicPoll" defaultChecked={false}
+                                onChange={handleInputChange} autoComplete="publicPoll"/>
                         </FormGroup>
 
                         <FormGroup>

@@ -11,7 +11,7 @@ public class Poll {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long pollID;
-    private String title = "";
+    private String question = "";
     private String category = "";
     private int yesCount = 0;
     private int noCount = 0;
@@ -57,12 +57,12 @@ public class Poll {
         return this;
     }
 
-    public String getTitle() {
-        return title;
+    public String getQuestion() {
+        return question;
     }
 
-    public void setTitle(String name) {
-        this.title = name;
+    public void setQuestion(String question) {
+        this.question = question;
     }
 
     public String getCategory() {

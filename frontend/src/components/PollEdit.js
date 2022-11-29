@@ -11,7 +11,7 @@ export default function PollEdit() {
     const { id } = useParams();
     const [poll, setPoll] = useState([]);
     const [updatedPoll, setUpdatedPoll] = useState([{
-        title: poll.title,
+        question: poll.question,
         category: poll.category,
         openPoll: poll.openPoll,
         publicPoll: poll.publicPoll
@@ -31,7 +31,7 @@ export default function PollEdit() {
                 setPoll(poll);
                 console.log(poll);
                 setUpdatedPoll({
-                    title: poll.title,
+                    question: poll.question,
                     category: poll.category,
                     openPoll: poll.openPoll,
                     publicPoll: poll.publicPoll
@@ -46,7 +46,7 @@ export default function PollEdit() {
         event.preventDefault();
         console.log(updatedPoll);
         const json = JSON.stringify({
-            title: updatedPoll.title,
+            question: updatedPoll.question,
             category: updatedPoll.category,
             openPoll: updatedPoll.openPoll,
             publicPoll: updatedPoll.publicPoll
@@ -68,12 +68,10 @@ export default function PollEdit() {
         const target = event.target;
         let parameter = target.name;
 
-        //event.preventDefault();
         setUpdatedPoll({
             ...updatedPoll,
             [parameter]: target.value
         })
-        //updatedPoll[parameter] = target.value
     }
 
     const handleOpenPoll = () => {
@@ -81,7 +79,6 @@ export default function PollEdit() {
             ...updatedPoll,
             openPoll: !updatedPoll.openPoll
         });
-        //console.log(updatedPoll);
     }
 
     const handlePublicPoll = () => {
@@ -89,7 +86,6 @@ export default function PollEdit() {
             ...updatedPoll,
             publicPoll: !updatedPoll.publicPoll
         });
-        //console.log(updatedPoll);
     }
 
     const deletePoll = (id) => {
@@ -125,14 +121,14 @@ export default function PollEdit() {
                     <h3>Edit poll {id}</h3>
                     <Form onSubmit={updatePoll}>
                         <FormGroup>
-                            <Label for="title">Title:</Label>
-                            <Input style={{flex: 'auto', marginLeft: "81px"}}
-                                   type="text" name="title" id="title" defaultValue={poll.title || ''}
-                                   onChange={handleInputChange} autoComplete="title"/>
+                            <Label for="question">Question:</Label>
+                            <Input style={{flex: 'auto', marginLeft: "25px"}}
+                                   type="text" name="question" id="question" defaultValue={poll.question || ''}
+                                   onChange={handleInputChange} autoComplete="question"/>
                         </FormGroup>
                         <FormGroup>
                             <Label for="category">Category:</Label>
-                            <Input style={{flex: 'auto', marginLeft: "47px"}}
+                            <Input style={{flex: 'auto', marginLeft: "25px"}}
                                    type="text" name="category" id="category" defaultValue={poll.category || ''}
                                    onChange={handleInputChange} autoComplete="category"/>
                         </FormGroup>

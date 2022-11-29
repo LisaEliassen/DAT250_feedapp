@@ -52,7 +52,7 @@ export default function Login({ setToken }) {
     return(
             <div className="login-wrapper">
                 <AppNavbar/>
-                <h1>Please Log In or Register</h1>
+                <h1>Please Log In</h1>
                 <form onSubmit={handleSubmit}>
                     <div style={{color:'red'}}>
                         {message}

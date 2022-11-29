@@ -10,7 +10,6 @@ import no.hvl.feedapp.model.Poll;
 import org.bson.Document;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class MongoDBService {
 
@@ -24,8 +23,6 @@ public class MongoDBService {
             String myDatabase = "testDB";
             this.database = mongoClient.getDatabase(myDatabase);
 
-            //System.out.println("database name -> " + this.database.getName());
-
             try {
                 boolean collectionExists = this.database.listCollectionNames()
                         .into(new ArrayList<>()).contains("test");
@@ -37,12 +34,6 @@ public class MongoDBService {
             } catch (MongoCommandException e) {
                 this.database.getCollection("test").drop();
             }
-
-            // Print the collection names inside the database
-            /*for (String name: this.database.listCollectionNames()) {
-                System.out.println(name);
-            }*/
-
     }
 
     public MongoDatabase getDatabase() {
@@ -77,7 +68,7 @@ public class MongoDBService {
 
     public Document createDoc(Poll poll) {
         Document doc = new Document("pollID", poll.getID());
-        doc.append("title", poll.getTitle());
+        doc.append("title", poll.getQuestion());
         doc.append("result", poll.getResult());
         return doc;
     }

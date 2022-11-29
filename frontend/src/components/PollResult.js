@@ -40,7 +40,7 @@ export default function PollResult() {
             <AppNavbar/>
             <Container fluid>
                 <h1>Current Result for Poll {id}</h1>
-                <h3>Question: {poll.title}</h3>
+                <h3>Question: {poll.question}</h3>
                 <br></br>
                 <div>
                     Yes count: {poll.yesCount}

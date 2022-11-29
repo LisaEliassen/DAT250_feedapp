@@ -72,7 +72,7 @@ export default function Polls() {
                         <thead>
                         <tr>
                             <th width="10%">PollID</th>
-                            <th width="25%">Title</th>
+                            <th width="25%">Question</th>
                             <th width="15%">Category</th>
                             <th width="15%">Open</th>
                             <th width="10%">Public</th>
@@ -82,7 +82,7 @@ export default function Polls() {
                         {polls && polls.map((poll) => (
                             <tr key={poll.pollID}>
                                 <td style={{whiteSpace: 'nowrap'}}>{poll.pollID}</td>
-                                <td>{poll.title}</td>
+                                <td>{poll.question}</td>
                                 <td>{poll.category}</td>
                                 <td>{(poll.openPoll) ? "Yes" : "No"}</td>
                                 <td>{(poll.publicPoll) ? "Yes" : "No"}</td>
@@ -124,7 +124,7 @@ export default function Polls() {
                         <thead>
                         <tr>
                             <th width="10%">PollID</th>
-                            <th width="25%">Title</th>
+                            <th width="25%">Question</th>
                             <th width="15%">Category</th>
                             <th width="15%">Open</th>
                             <th width="10%">Public</th>
@@ -134,7 +134,7 @@ export default function Polls() {
                         {polls && polls.map((poll) => (
                             <tr key={poll.pollID}>
                                 <td style={{whiteSpace: 'nowrap'}}>{poll.pollID}</td>
-                                <td>{poll.title}</td>
+                                <td>{poll.question}</td>
                                 <td>{poll.category}</td>
                                 <td>{(poll.openPoll) ? "Yes" : "No"}</td>
                                 <td>{(poll.publicPoll) ? "Yes" : "No"}</td>
