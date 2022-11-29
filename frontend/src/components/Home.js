@@ -5,11 +5,11 @@ import { Button, Container } from 'reactstrap';
 import useToken from "./useToken";
 
 export default function Home() {
-    const { token, setToken, deleteToken} = useToken();
+    const { token, deleteToken} = useToken();
 
     const handleLogOut = () => {
         deleteToken();
-        window.location.reload(false);
+        window.location.reload();
     }
 
     if (token != null) {
