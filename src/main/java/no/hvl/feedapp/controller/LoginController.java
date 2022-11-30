@@ -5,10 +5,7 @@ import no.hvl.feedapp.daos.FeedAppUserDAO;
 import no.hvl.feedapp.daos.IOTDeviceDAO;
 import no.hvl.feedapp.model.FeedAppUser;
 import no.hvl.feedapp.model.IOTDevice;
-import no.hvl.feedapp.util.DatabaseService;
-import no.hvl.feedapp.util.DeviceConnectRequest;
-import no.hvl.feedapp.util.LoginRequest;
-import no.hvl.feedapp.util.Token;
+import no.hvl.feedapp.util.*;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.SecureRandom;
@@ -23,6 +20,8 @@ public class LoginController {
     final DatabaseService<IOTDevice> dbServiceDevice = new DatabaseService<>();
     final FeedAppUserDAO userDAO = new FeedAppUserDAO(dbServiceUser);
     final IOTDeviceDAO deviceDAO = new IOTDeviceDAO(dbServiceDevice);
+    final PasswordHasher pHasher = new PasswordHasher();
+
     final Gson gson = new Gson();
 
     public String getToken() {
@@ -35,7 +34,7 @@ public class LoginController {
     public String login(@RequestBody LoginRequest loginRequest){
         FeedAppUser user = userDAO.getUserByUsername(loginRequest.getUsername());
         if (user != null) {
-            if (user.getPassword().equals(loginRequest.getPassword())) {
+            if (this.pHasher.checkPassword(loginRequest.getPassword(), user.getPassword())) {
                 return gson.toJson(new Token(getToken(),user.getID(), null,"Login Success"));
             }
         }

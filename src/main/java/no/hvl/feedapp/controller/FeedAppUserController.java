@@ -5,6 +5,7 @@ import no.hvl.feedapp.daos.FeedAppUserDAO;
 import no.hvl.feedapp.dtos.FeedAppUserDTO;
 import no.hvl.feedapp.model.FeedAppUser;
 import no.hvl.feedapp.util.DatabaseService;
+import no.hvl.feedapp.util.PasswordHasher;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,14 +15,17 @@ import java.util.stream.Collectors;
 @CrossOrigin(origins = {"http://localhost:3000", "http://localhost:3001"})
 public class FeedAppUserController {
     Gson gson = new Gson();
-
     final DatabaseService<FeedAppUser> dbService = new DatabaseService<>();
     final FeedAppUserDAO userDAO = new FeedAppUserDAO(dbService);
+    final PasswordHasher pHasher = new PasswordHasher();
+
 
     @PostMapping("/users")
     public String createUser(@RequestBody FeedAppUser user) {
-        userDAO.create(user);
-        return gson.toJson(new FeedAppUserDTO(user));
+        String hashedPassword = this.pHasher.hashPassword(user.getPassword());
+        FeedAppUser newUser = user.setPassword(hashedPassword);
+        userDAO.create(newUser);
+        return gson.toJson(new FeedAppUserDTO(newUser));
     }
 
     @GetMapping("/users")

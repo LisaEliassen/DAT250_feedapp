@@ -14,9 +14,7 @@ public class PollDTO {
     private String category;
     private boolean openPoll;
     private boolean publicPoll;
-
     private int yesCount;
-
     private int noCount;
     private Long userID;
     private List<Long> votes;
@@ -111,5 +109,21 @@ public class PollDTO {
 
     public void setIots(List<Long> iots) {
         this.iots = iots;
+    }
+
+    public int getYesCount() {
+        return yesCount;
+    }
+
+    public void setYesCount(int yesCount) {
+        this.yesCount = yesCount;
+    }
+
+    public int getNoCount() {
+        return noCount;
+    }
+
+    public void setNoCount(int noCount) {
+        this.noCount = noCount;
     }
 }

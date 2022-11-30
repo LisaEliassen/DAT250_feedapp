@@ -94,8 +94,9 @@ public class FeedAppUser {
         return this.password;
     }
 
-    public void setPassword(String password) {
+    public FeedAppUser setPassword(String password) {
         this.password = password;
+        return this;
     }
 
     public void removePoll(Poll poll) {

@@ -9,43 +9,18 @@ import PollCreate from "./PollCreate";
 import PollEdit from "./PollEdit";
 import PollResult from "./PollResult";
 
-
 function MyRouter() {
-    const { token, setToken } = useToken();
+    const {setToken } = useToken();
 
     return createBrowserRouter([
-        {
-            path: "/",
-            element: <Home />,
-        },
-        {
-            path: "/polls",
-            element: <Polls />
-        },
-        {
-            path: "/create_poll",
-            element: <PollCreate />
-        },
-        {
-            path: "/edit_poll/:id",
-            element: <PollEdit />
-        },
-        {
-            path: "/vote/:id",
-            element: <Vote />
-        },
-        {
-            path: "poll_result/:id",
-            element: <PollResult />
-        },
-        {
-            path: "/register",
-            element: <Register />
-        },
-        {
-            path: "/login",
-            element: <Login setToken={setToken} />
-        }
+        {path: "/", element: <Home />,},
+        {path: "/polls", element: <Polls />},
+        {path: "/create_poll", element: <PollCreate />},
+        {path: "/edit_poll/:id", element: <PollEdit />},
+        {path: "/vote/:id", element: <Vote />},
+        {path: "poll_result/:id", element: <PollResult />},
+        {path: "/register", element: <Register />},
+        {path: "/login", element: <Login setToken={setToken} />}
     ], );
 }
 
