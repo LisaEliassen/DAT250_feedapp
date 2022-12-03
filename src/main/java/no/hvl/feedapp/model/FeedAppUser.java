@@ -16,11 +16,8 @@ public class FeedAppUser {
     private boolean admin;
     private String password;
 
-    //@JsonIgnoreProperties({"feedappuser"})
     @OneToMany(mappedBy = "feedappuser", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     private List<Poll> polls = new ArrayList<>();
-
-    //@JsonIgnoreProperties({"feedappuser"})
     @OneToMany(mappedBy = "feedappuser", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     private List<Vote> votes = new ArrayList<>();
 

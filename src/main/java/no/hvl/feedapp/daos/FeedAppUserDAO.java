@@ -15,14 +15,11 @@ public class FeedAppUserDAO {
     private final AtomicLong id_generator;
     public static final String PERSISTENCE_UNIT_NAME = "feedapp";
     private EntityManagerFactory factory;
-    @PersistenceContext
-    private EntityManager em;
     private DatabaseService dbService;
 
     public FeedAppUserDAO(DatabaseService dbService) {
         this.id_generator = new AtomicLong();
         this.factory = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
-        //this.em = factory.createEntityManager();
         this.dbService = dbService;
     }
 

@@ -6,7 +6,6 @@ import java.util.List;
 
 @Entity
 @Table(name="Polls")
-//@JsonIgnoreProperties({"feedappuser", "votes", "iots"})
 public class Poll {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

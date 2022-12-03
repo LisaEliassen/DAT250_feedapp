@@ -12,11 +12,7 @@ export default function Polls() {
     const [user, setUser] = useState([]);
 
     const handlePollCreationNav = () => {
-        navigate('/create_poll', {
-            state: {
-                token: token,
-            }
-        });
+        navigate('/create_poll', {replace:true});
     }
 
     useEffect(() => {
@@ -93,6 +89,11 @@ export default function Polls() {
                                                 <Button onClick={() => handleVote(poll.pollID)}>Vote</Button>
                                             </ButtonGroup>
                                         )}
+                                        {(!poll.publicPoll || !poll.openPoll) && (
+                                            <ButtonGroup>
+                                                <Button disabled={true}>Vote</Button>
+                                            </ButtonGroup>
+                                        )}
                                     </div>
                                 </td>
                             </tr>
@@ -151,9 +152,7 @@ export default function Polls() {
                                                 )}
                                                 {(token.userID != poll.userID && poll.openPoll) && (
                                                     <div>
-                                                        <Button size="sm"
-                                                                color="primary"
-                                                                disabled={!poll.openPoll}
+                                                        <Button disabled={!poll.openPoll}
                                                                 onClick={ () => handleVote(poll.pollID)}>Vote</Button>
                                                     </div>
                                                 )}

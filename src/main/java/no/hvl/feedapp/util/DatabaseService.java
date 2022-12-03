@@ -1,21 +1,15 @@
 package no.hvl.feedapp.util;
 
-import no.hvl.feedapp.model.FeedAppUser;
-
 import javax.persistence.*;
 import java.util.List;
 
 public class DatabaseService<T> {
 
     public static final String PERSISTENCE_UNIT_NAME = "feedapp";
-    //@Autowired
     private EntityManagerFactory factory;
-    @PersistenceContext
-    private EntityManager em;
 
     public DatabaseService() {
         factory = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
-        //em = factory.createEntityManager();
     }
 
     public List<T> getAll(Class<T> modelClass, String queryString) {
